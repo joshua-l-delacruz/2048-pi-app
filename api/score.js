@@ -11,33 +11,83 @@ export default async function handler(req, res) {
 
     try {
         const {
-            username,
-            uid,
+            accessToken,
             score
         } = req.body || {};
 
-        // Validate required fields
+        // Validate access token
         if (
-            typeof username !== 'string' ||
-            !username.trim() ||
-            typeof uid !== 'string' ||
-            !uid.trim() ||
+            typeof accessToken !== 'string' ||
+            !accessToken.trim()
+        ) {
+            return res.status(400).json({
+                error: 'Missing Pi access token'
+            });
+        }
+
+        // Validate score
+        if (
             typeof score !== 'number' ||
             !Number.isFinite(score) ||
+            !Number.isInteger(score) ||
             score < 0
         ) {
             return res.status(400).json({
-                error: 'Invalid score data'
+                error: 'Invalid score'
             });
         }
 
-        // Only allow reasonable integer game scores
-        if (!Number.isInteger(score)) {
-            return res.status(400).json({
-                error: 'Score must be an integer'
+        /*
+         * Validate the Pi access token with Pi Network.
+         */
+        const piResponse = await fetch(
+            'https://api.minepi.com/v2/me',
+            {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${accessToken.trim()}`
+                }
+            }
+        );
+
+        let piUser = null;
+
+        try {
+            piUser = await piResponse.json();
+        } catch (_) {
+            piUser = null;
+        }
+
+        if (!piResponse.ok || !piUser?.uid) {
+            console.error(
+                'Pi token validation failed:',
+                piUser
+            );
+
+            return res.status(401).json({
+                error: 'Invalid or expired Pi authentication'
             });
         }
 
+        /*
+         * Get the authenticated Pi user's identity
+         * directly from Pi Network.
+         */
+        const uid = piUser.uid;
+        const username = piUser.username;
+
+        if (
+            typeof username !== 'string' ||
+            !username.trim()
+        ) {
+            return res.status(401).json({
+                error: 'Pi username could not be verified'
+            });
+        }
+
+        /*
+         * Save the verified user and score to Neon.
+         */
         await sql`
             INSERT INTO scores (
                 username,
@@ -46,7 +96,7 @@ export default async function handler(req, res) {
             )
             VALUES (
                 ${username.trim()},
-                ${uid.trim()},
+                ${uid},
                 ${score}
             )
         `;
