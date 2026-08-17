@@ -8,24 +8,20 @@ const sql = neon(process.env.DATABASE_URL);
 ========================================================= */
 
 /*
- * A generous sanity ceiling.
+ * Generous sanity ceiling.
  *
- * This is NOT intended to determine whether every score
- * was legitimately achieved. It simply rejects obviously
- * abusive values that are far outside normal 2048 play.
+ * This is NOT intended to prove that a score is legitimate.
+ * It only rejects obviously abusive/impossible values.
  */
 const MAX_REASONABLE_SCORE = 10_000_000;
 
 
 /*
  * Minimum time between accepted submissions from the
- * same Pi UID.
- *
- * This helps prevent someone from repeatedly hammering
- * the endpoint with the same/different scores.
+ * same verified Pi UID.
  *
  * The database is used as the source of truth, so this
- * protection also works across Vercel serverless instances.
+ * works across Vercel serverless instances.
  */
 const MIN_SUBMISSION_INTERVAL_SECONDS = 10;
 
@@ -36,13 +32,14 @@ const MIN_SUBMISSION_INTERVAL_SECONDS = 10;
 
 export default async function handler(req, res) {
 
-    /*
-     * Only POST is allowed.
-     */
+    /* =====================================================
+       ONLY POST IS ALLOWED
+    ===================================================== */
 
     if (req.method !== 'POST') {
 
         return res.status(405).json({
+            success: false,
             error: 'Method not allowed'
         });
 
@@ -52,7 +49,7 @@ export default async function handler(req, res) {
     try {
 
         /* =================================================
-           READ REQUEST
+           READ REQUEST BODY
         ================================================= */
 
         const {
@@ -62,7 +59,7 @@ export default async function handler(req, res) {
 
 
         /* =================================================
-           VALIDATE ACCESS TOKEN FORMAT
+           VALIDATE ACCESS TOKEN
         ================================================= */
 
         if (
@@ -71,6 +68,7 @@ export default async function handler(req, res) {
         ) {
 
             return res.status(400).json({
+                success: false,
                 error: 'Missing Pi access token'
             });
 
@@ -82,8 +80,8 @@ export default async function handler(req, res) {
 
 
         /*
-         * Do not allow an unnecessarily large token to reach
-         * the Pi API.
+         * Prevent unnecessarily large values from being
+         * sent to the Pi API.
          */
 
         if (
@@ -91,6 +89,7 @@ export default async function handler(req, res) {
         ) {
 
             return res.status(400).json({
+                success: false,
                 error: 'Invalid Pi access token'
             });
 
@@ -109,6 +108,7 @@ export default async function handler(req, res) {
         ) {
 
             return res.status(400).json({
+                success: false,
                 error: 'Invalid score'
             });
 
@@ -116,7 +116,7 @@ export default async function handler(req, res) {
 
 
         /*
-         * Reject obviously impossible/abusive values.
+         * Reject obviously abusive values.
          */
 
         if (
@@ -124,14 +124,16 @@ export default async function handler(req, res) {
         ) {
 
             return res.status(400).json({
-                error: 'Score exceeds the allowed limit'
+                success: false,
+                error:
+                    'Score exceeds the allowed limit'
             });
 
         }
 
 
         /* =================================================
-           VERIFY PI IDENTITY
+           VERIFY PI IDENTITY SERVER-SIDE
         ================================================= */
 
         const piResponse =
@@ -151,8 +153,11 @@ export default async function handler(req, res) {
             );
 
 
-        let piUser = null;
+        /* =================================================
+           READ PI RESPONSE
+        ================================================= */
 
+        let piUser = null;
 
         try {
 
@@ -186,6 +191,7 @@ export default async function handler(req, res) {
             );
 
             return res.status(401).json({
+                success: false,
                 error:
                     'Invalid or expired Pi authentication'
             });
@@ -193,13 +199,17 @@ export default async function handler(req, res) {
         }
 
 
+        /* =================================================
+           GET VERIFIED PI IDENTITY
+        ================================================= */
+
         /*
          * IMPORTANT:
          *
-         * These values are trusted because they came from
-         * Pi Network's /v2/me response.
+         * UID and username are NEVER accepted from the
+         * browser.
          *
-         * We NEVER accept uid or username from the browser.
+         * They come directly from Pi Network /v2/me.
          */
 
         const uid =
@@ -211,9 +221,14 @@ export default async function handler(req, res) {
                 : '';
 
 
+        /* =================================================
+           VERIFY USERNAME
+        ================================================= */
+
         if (!username) {
 
             return res.status(401).json({
+                success: false,
                 error:
                     'Pi username could not be verified'
             });
@@ -222,15 +237,12 @@ export default async function handler(req, res) {
 
 
         /* =================================================
-           DUPLICATE / RAPID SUBMISSION PROTECTION
+           CHECK RECENT SUBMISSION
         ================================================= */
 
         /*
-         * Look at the most recent submission from this
-         * verified Pi account.
-         *
-         * Because uid comes from Pi /v2/me, the client
-         * cannot choose another player's identity.
+         * Find the most recent score belonging to this
+         * verified Pi UID.
          */
 
         const recentSubmission =
@@ -245,6 +257,10 @@ export default async function handler(req, res) {
                 LIMIT 1
             `;
 
+
+        /* =================================================
+           ENFORCE SUBMISSION COOLDOWN
+        ================================================= */
 
         if (
             recentSubmission.length > 0
@@ -268,10 +284,6 @@ export default async function handler(req, res) {
                 ) / 1000;
 
 
-            /*
-             * Prevent rapid submissions.
-             */
-
             if (
                 Number.isFinite(
                     elapsedSeconds
@@ -281,29 +293,9 @@ export default async function handler(req, res) {
             ) {
 
                 return res.status(429).json({
+                    success: false,
                     error:
                         'Please wait before submitting another score'
-                });
-
-            }
-
-
-            /*
-             * Prevent the exact same score from being
-             * repeatedly submitted.
-             *
-             * This is intentionally separate from the
-             * time-based protection.
-             */
-
-            if (
-                Number(previous.score) ===
-                score
-            ) {
-
-                return res.status(409).json({
-                    error:
-                        'This score has already been submitted'
                 });
 
             }
@@ -342,13 +334,18 @@ export default async function handler(req, res) {
 
     } catch (error) {
 
+        /*
+         * Do not expose internal database or server
+         * details to the browser.
+         */
+
         console.error(
             'Score submission error:',
             error
         );
 
-
         return res.status(500).json({
+            success: false,
             error:
                 'Failed to save score'
         });
