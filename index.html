@@ -1791,104 +1791,25 @@
                             id="grid"
                         >
 
-                            <div
-                                class="grid-cell"
-                                data-index="0"
-                                data-value=""
-                            ></div>
+                            <div class="grid-cell" data-index="0" data-value=""></div>
+                            <div class="grid-cell" data-index="1" data-value=""></div>
+                            <div class="grid-cell" data-index="2" data-value=""></div>
+                            <div class="grid-cell" data-index="3" data-value=""></div>
 
-                            <div
-                                class="grid-cell"
-                                data-index="1"
-                                data-value=""
-                            ></div>
+                            <div class="grid-cell" data-index="4" data-value=""></div>
+                            <div class="grid-cell" data-index="5" data-value=""></div>
+                            <div class="grid-cell" data-index="6" data-value=""></div>
+                            <div class="grid-cell" data-index="7" data-value=""></div>
 
-                            <div
-                                class="grid-cell"
-                                data-index="2"
-                                data-value=""
-                            ></div>
+                            <div class="grid-cell" data-index="8" data-value=""></div>
+                            <div class="grid-cell" data-index="9" data-value=""></div>
+                            <div class="grid-cell" data-index="10" data-value=""></div>
+                            <div class="grid-cell" data-index="11" data-value=""></div>
 
-                            <div
-                                class="grid-cell"
-                                data-index="3"
-                                data-value=""
-                            ></div>
-
-
-                            <div
-                                class="grid-cell"
-                                data-index="4"
-                                data-value=""
-                            ></div>
-
-                            <div
-                                class="grid-cell"
-                                data-index="5"
-                                data-value=""
-                            ></div>
-
-                            <div
-                                class="grid-cell"
-                                data-index="6"
-                                data-value=""
-                            ></div>
-
-                            <div
-                                class="grid-cell"
-                                data-index="7"
-                                data-value=""
-                            ></div>
-
-
-                            <div
-                                class="grid-cell"
-                                data-index="8"
-                                data-value=""
-                            ></div>
-
-                            <div
-                                class="grid-cell"
-                                data-index="9"
-                                data-value=""
-                            ></div>
-
-                            <div
-                                class="grid-cell"
-                                data-index="10"
-                                data-value=""
-                            ></div>
-
-                            <div
-                                class="grid-cell"
-                                data-index="11"
-                                data-value=""
-                            ></div>
-
-
-                            <div
-                                class="grid-cell"
-                                data-index="12"
-                                data-value=""
-                            ></div>
-
-                            <div
-                                class="grid-cell"
-                                data-index="13"
-                                data-value=""
-                            ></div>
-
-                            <div
-                                class="grid-cell"
-                                data-index="14"
-                                data-value=""
-                            ></div>
-
-                            <div
-                                class="grid-cell"
-                                data-index="15"
-                                data-value=""
-                            ></div>
+                            <div class="grid-cell" data-index="12" data-value=""></div>
+                            <div class="grid-cell" data-index="13" data-value=""></div>
+                            <div class="grid-cell" data-index="14" data-value=""></div>
+                            <div class="grid-cell" data-index="15" data-value=""></div>
 
                         </div>
 
@@ -1918,9 +1839,7 @@
                 </main>
 
 
-                <!-- =================================================
-                     SIDE PANEL
-                ================================================== -->
+                <!-- SIDE PANEL -->
 
                 <aside class="side-panel">
 
@@ -1933,51 +1852,23 @@
                         <div class="swipe-list">
 
                             <div class="swipe-item">
-
-                                <div class="swipe-icon">
-                                    ↑
-                                </div>
-
-                                <span>
-                                    Swipe Up
-                                </span>
-
+                                <div class="swipe-icon">↑</div>
+                                <span>Swipe Up</span>
                             </div>
 
                             <div class="swipe-item">
-
-                                <div class="swipe-icon">
-                                    ↓
-                                </div>
-
-                                <span>
-                                    Swipe Down
-                                </span>
-
+                                <div class="swipe-icon">↓</div>
+                                <span>Swipe Down</span>
                             </div>
 
                             <div class="swipe-item">
-
-                                <div class="swipe-icon">
-                                    ←
-                                </div>
-
-                                <span>
-                                    Swipe Left
-                                </span>
-
+                                <div class="swipe-icon">←</div>
+                                <span>Swipe Left</span>
                             </div>
 
                             <div class="swipe-item">
-
-                                <div class="swipe-icon">
-                                    →
-                                </div>
-
-                                <span>
-                                    Swipe Right
-                                </span>
-
+                                <div class="swipe-icon">→</div>
+                                <span>Swipe Right</span>
                             </div>
 
                         </div>
@@ -2082,14 +1973,10 @@
 
         </p>
 
-
-        <!-- DATABASE SAVE STATUS -->
-
         <div
             class="score-save-status"
             id="scoreSaveStatus"
         ></div>
-
 
         <button
             class="play-again"
@@ -2132,6 +2019,8 @@
 
     let scoreSubmitted = false;
 
+    let gameWon = false;
+
     let touchStartX = 0;
 
     let touchStartY = 0;
@@ -2140,13 +2029,14 @@
 
 
     /*
-        Empty string means the API is on the
-        same Vercel domain as the frontend.
-
-        Example:
-
-        https://2048-indol-seven.vercel.app/api/score
-    */
+     * Frontend and API are deployed on the same
+     * Vercel domain.
+     *
+     * Therefore:
+     *
+     * /api/auth/validate
+     * /api/score
+     */
 
     const BACKEND_URL = "";
 
@@ -2198,7 +2088,8 @@
         document.getElementById("playAgainBtn");
 
 
-    bestElement.textContent = best;
+    bestElement.textContent =
+        best;
 
 
     /* =========================================================
@@ -2282,7 +2173,9 @@
         );
 
 
-        if (type === "success") {
+        if (
+            type === "success"
+        ) {
 
             authStatus.classList.add(
                 "success"
@@ -2291,7 +2184,9 @@
         }
 
 
-        if (type === "error") {
+        if (
+            type === "error"
+        ) {
 
             authStatus.classList.add(
                 "error"
@@ -2386,9 +2281,11 @@
             currentUser =
                 validationResult.user;
 
-            isAuthenticated = true;
+            isAuthenticated =
+                true;
 
-            scoreSubmitted = false;
+            scoreSubmitted =
+                false;
 
 
             setAuthStatus(
@@ -2430,7 +2327,8 @@
             );
 
 
-            loginBtn.disabled = false;
+            loginBtn.disabled =
+                false;
 
             loginBtn.textContent =
                 "🔐  Login with Pi";
@@ -2481,7 +2379,9 @@
         }
 
 
-        if (!response.ok) {
+        if (
+            !response.ok
+        ) {
 
             throw new Error(
                 data?.error ||
@@ -2504,8 +2404,13 @@
         user
     ) {
 
+        const username =
+            user?.username ||
+            "Pi User";
+
+
         userInfo.textContent =
-            `👤 ${user.username}`;
+            `👤 ${username}`;
 
     }
 
@@ -2579,6 +2484,8 @@
 
         scoreSubmitted = false;
 
+        gameWon = false;
+
 
         gameArea.classList.remove(
             "active"
@@ -2644,6 +2551,8 @@
         score = 0;
 
         scoreSubmitted = false;
+
+        gameWon = false;
 
 
         scoreElement.textContent =
@@ -2717,7 +2626,9 @@
                 : 4;
 
 
-        if (animate) {
+        if (
+            animate
+        ) {
 
             requestAnimationFrame(
                 () => {
@@ -2822,6 +2733,22 @@
     function move(
         direction
     ) {
+
+        /*
+         * Do not allow moves while the
+         * game-over screen is visible.
+         */
+
+        if (
+            gameOverElement.classList.contains(
+                "show"
+            )
+        ) {
+
+            return;
+
+        }
+
 
         const oldGrid =
             [...grid];
@@ -3166,9 +3093,18 @@
 
     function checkGameOver() {
 
+        /*
+         * The game is considered won when
+         * the 2048 tile appears.
+         */
+
         if (
+            !gameWon &&
             grid.includes(2048)
         ) {
+
+            gameWon = true;
+
 
             gameOverText.textContent =
                 "You Won!";
@@ -3184,11 +3120,6 @@
 
             showGameOver();
 
-
-            /*
-                Save the score after the
-                game reaches 2048.
-            */
 
             submitScore();
 
@@ -3216,11 +3147,6 @@
 
             showGameOver();
 
-
-            /*
-                Save the score after
-                normal game over.
-            */
 
             submitScore();
 
@@ -3302,29 +3228,29 @@
 
 
     /* =========================================================
-       SAVE SCORE TO DATABASE
+       SAVE SCORE TO NEON DATABASE
        
-       This sends:
-
-       {
-           accessToken,
-           score
-       }
-
-       to:
-
        POST /api/score
 
-       Your backend is then responsible for
-       validating the Pi token and inserting
-       the score into Neon.
+       Request:
+
+       {
+           accessToken: "...",
+           score: 123
+       }
+
+       Your api/score.js then:
+
+       1. Validates the Pi access token
+       2. Gets uid and username from Pi
+       3. Inserts username, uid and score into Neon
     ========================================================= */
 
     async function submitScore() {
 
         /*
-            Never submit demo scores.
-        */
+         * Demo games are never submitted.
+         */
 
         if (
             !isAuthenticated ||
@@ -3341,9 +3267,8 @@
 
 
         /*
-            Prevent duplicate submissions
-            for the same game.
-        */
+         * Prevent duplicate submissions.
+         */
 
         if (
             scoreSubmitted
@@ -3355,17 +3280,25 @@
 
 
         /*
-            Prevent a zero-score submission.
-        */
+         * Prevent zero-score submissions.
+         */
 
         if (
             score <= 0
         ) {
 
+            scoreSaveStatus.textContent =
+                "Score is too low to submit.";
+
             return;
 
         }
 
+
+        /*
+         * Mark as submitted immediately so
+         * multiple calls cannot create duplicates.
+         */
 
         scoreSubmitted = true;
 
@@ -3431,6 +3364,18 @@
             }
 
 
+            if (
+                !data?.success
+            ) {
+
+                throw new Error(
+                    data?.error ||
+                    "The server did not confirm the score."
+                );
+
+            }
+
+
             scoreSaveStatus.className =
                 "score-save-status success";
 
@@ -3448,9 +3393,8 @@
         } catch (error) {
 
             /*
-                Allow another attempt if
-                the network temporarily fails.
-            */
+             * Allow retry if saving failed.
+             */
 
             scoreSubmitted = false;
 
