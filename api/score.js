@@ -10,25 +10,57 @@ export default async function handler(req, res) {
     }
 
     try {
-        const { username, uid, score } = req.body;
+        const {
+            username,
+            uid,
+            score
+        } = req.body || {};
 
-        if (!username || !uid || typeof score !== 'number') {
+        // Validate required fields
+        if (
+            typeof username !== 'string' ||
+            !username.trim() ||
+            typeof uid !== 'string' ||
+            !uid.trim() ||
+            typeof score !== 'number' ||
+            !Number.isFinite(score) ||
+            score < 0
+        ) {
             return res.status(400).json({
                 error: 'Invalid score data'
             });
         }
 
+        // Only allow reasonable integer game scores
+        if (!Number.isInteger(score)) {
+            return res.status(400).json({
+                error: 'Score must be an integer'
+            });
+        }
+
         await sql`
-            INSERT INTO scores (username, uid, score)
-            VALUES (${username}, ${uid}, ${score})
+            INSERT INTO scores (
+                username,
+                uid,
+                score
+            )
+            VALUES (
+                ${username.trim()},
+                ${uid.trim()},
+                ${score}
+            )
         `;
 
         return res.status(200).json({
-            success: true
+            success: true,
+            message: 'Score saved successfully'
         });
 
     } catch (error) {
-        console.error('Score submission error:', error);
+        console.error(
+            'Score submission error:',
+            error
+        );
 
         return res.status(500).json({
             error: 'Failed to save score'
