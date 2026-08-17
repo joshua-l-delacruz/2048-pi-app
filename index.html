@@ -2301,6 +2301,17 @@
     const BACKEND_URL = "";
 
 
+    /*
+        Leaderboard request generation.
+
+        This prevents an older public leaderboard request
+        from finishing after login/logout and overwriting
+        the leaderboard using stale identity information.
+    */
+
+    let leaderboardRequestId = 0;
+
+
     /* =========================================================
        DOM
     ========================================================= */
@@ -2542,9 +2553,11 @@
             startGame();
 
             /*
-                Load leaderboard after the authenticated
-                user's UID is known so we can display
-                YOU for their own entries.
+                Load leaderboard only after the backend has
+                verified the Pi identity.
+
+                The leaderboard renderer can now reliably
+                identify the current player.
             */
 
             await loadLeaderboard();
@@ -2711,6 +2724,13 @@
 
     function logoutUser() {
 
+        /*
+            Invalidate any leaderboard request that may
+            still be in flight under the previous identity.
+        */
+
+        leaderboardRequestId++;
+
         currentUser = null;
 
         accessToken = null;
@@ -2744,8 +2764,9 @@
         );
 
         /*
-            Reload the public leaderboard so no
-            previous user remains marked as YOU.
+            Reload the public leaderboard with no current
+            identity. No previous player can remain marked
+            as YOU.
         */
 
         loadLeaderboard();
@@ -2875,6 +2896,138 @@
 
 
     /* =========================================================
+       NORMALIZE USER IDENTITY
+    ========================================================= */
+
+    function normalizeIdentity(
+        value
+    ) {
+
+        if (
+            value === null ||
+            value === undefined
+        ) {
+
+            return "";
+
+        }
+
+        return String(value)
+            .trim()
+            .toLowerCase();
+
+    }
+
+
+    /*
+        Production /api/leaderboard currently returns public
+        leaderboard fields such as:
+
+            {
+                username,
+                score,
+                created_at
+            }
+
+        It does NOT necessarily expose uid.
+
+        Therefore YOU must not depend exclusively on entry.uid.
+
+        When uid is present, UID is the strongest match.
+
+        When uid is intentionally omitted by the public API,
+        the verified Pi username returned by /api/auth/validate
+        is used as the fallback identity.
+
+        Pi usernames are compared case-insensitively so a
+        difference such as:
+
+            JoshuaDelacruz
+            joshuadelacruz
+
+        does not prevent the current user from becoming YOU.
+    */
+
+    function isLeaderboardEntryCurrentUser(
+        entry,
+        user
+    ) {
+
+        if (
+            !entry ||
+            !user
+        ) {
+
+            return false;
+
+        }
+
+
+        /*
+            1. Prefer verified UID whenever the leaderboard
+               response contains one.
+        */
+
+        const currentUid =
+            normalizeIdentity(
+                user.uid
+            );
+
+        const entryUid =
+            normalizeIdentity(
+                entry.uid
+            );
+
+        if (
+            currentUid &&
+            entryUid
+        ) {
+
+            return (
+                currentUid ===
+                entryUid
+            );
+
+        }
+
+
+        /*
+            2. Production leaderboard privacy-safe fallback.
+
+            The public leaderboard does not need to expose
+            UID for every player. Match against the username
+            returned by the already-verified auth endpoint.
+        */
+
+        const currentUsername =
+            normalizeIdentity(
+                user.username
+            );
+
+        const entryUsername =
+            normalizeIdentity(
+                entry.username
+            );
+
+        if (
+            currentUsername &&
+            entryUsername
+        ) {
+
+            return (
+                currentUsername ===
+                entryUsername
+            );
+
+        }
+
+
+        return false;
+
+    }
+
+
+    /* =========================================================
        LEADERBOARD
     ========================================================= */
 
@@ -2883,6 +3036,38 @@
         if (!leaderboardList) {
             return;
         }
+
+
+        /*
+            Give this request a unique generation.
+
+            If another login/logout/refresh starts before this
+            request finishes, its result cannot overwrite the
+            newer leaderboard state.
+        */
+
+        const requestId =
+            ++leaderboardRequestId;
+
+
+        /*
+            Capture the identity at request start.
+
+            This is important because currentUser may change
+            while fetch() is in progress.
+        */
+
+        const identitySnapshot =
+            currentUser
+                ? {
+                    uid:
+                        currentUser.uid || null,
+
+                    username:
+                        currentUser.username || null
+                }
+                : null;
+
 
         leaderboardList.innerHTML =
             `
@@ -2911,6 +3096,7 @@
                     }
                 );
 
+
             let data = null;
 
             try {
@@ -2924,6 +3110,7 @@
 
             }
 
+
             if (!response.ok) {
 
                 throw new Error(
@@ -2932,6 +3119,7 @@
                 );
 
             }
+
 
             if (
                 !data ||
@@ -2945,6 +3133,7 @@
 
             }
 
+
             const leaderboard =
                 Array.isArray(
                     data.leaderboard
@@ -2952,16 +3141,57 @@
                     ? data.leaderboard
                     : [];
 
+
+            /*
+                Ignore stale responses.
+
+                Example:
+
+                Request A = public leaderboard
+                User logs in
+                Request B = authenticated leaderboard
+
+                If A finishes after B, A is discarded.
+            */
+
+            if (
+                requestId !==
+                leaderboardRequestId
+            ) {
+
+                return;
+
+            }
+
+
             renderLeaderboard(
-                leaderboard
+                leaderboard,
+                identitySnapshot
             );
 
+
         } catch (error) {
+
+            /*
+                Do not replace a newer leaderboard with an
+                error from an older request.
+            */
+
+            if (
+                requestId !==
+                leaderboardRequestId
+            ) {
+
+                return;
+
+            }
+
 
             console.error(
                 "Leaderboard error:",
                 error
             );
+
 
             leaderboardList.innerHTML =
                 `
@@ -2972,8 +3202,15 @@
 
         } finally {
 
-            leaderboardRefresh.disabled =
-                false;
+            if (
+                requestId ===
+                leaderboardRequestId
+            ) {
+
+                leaderboardRefresh.disabled =
+                    false;
+
+            }
 
         }
 
@@ -2985,10 +3222,12 @@
     ========================================================= */
 
     function renderLeaderboard(
-        leaderboard
+        leaderboard,
+        userSnapshot = currentUser
     ) {
 
         if (
+            !Array.isArray(leaderboard) ||
             !leaderboard.length
         ) {
 
@@ -3008,6 +3247,14 @@
         leaderboardList.innerHTML = "";
 
 
+        /*
+            The backend is responsible for determining the
+            leaderboard order.
+
+            We preserve that order here and only display the
+            first 10 entries.
+        */
+
         leaderboard
             .slice(0, 10)
             .forEach(
@@ -3016,32 +3263,30 @@
                     index
                 ) => {
 
+
                     /*
-                        Compare the verified UID.
-
                         IMPORTANT:
-                        We do NOT compare usernames.
 
-                        Example:
+                        Do NOT use only entry.uid.
 
-                        currentUser.uid
-                        =
-                        5673cfee-08af-4bc8-8d59-8d94a56b6c3b
+                        Production /api/leaderboard may intentionally
+                        return:
 
-                        entry.uid
-                        =
-                        5673cfee-08af-4bc8-8d59-8d94a56b6c3b
+                            username
+                            score
+                            created_at
 
-                        Result:
-                        YOU
+                        without UID.
+
+                        The helper first uses UID when available,
+                        then safely falls back to the verified
+                        username.
                     */
 
                     const isCurrentUser =
-                        Boolean(
-                            currentUser &&
-                            currentUser.uid &&
-                            entry.uid &&
-                            currentUser.uid === entry.uid
+                        isLeaderboardEntryCurrentUser(
+                            entry,
+                            userSnapshot
                         );
 
 
@@ -3894,8 +4139,9 @@
                 Refresh leaderboard immediately after
                 successfully saving the score.
 
-                This allows the new score to appear
-                without refreshing the entire page.
+                The authenticated identity is still in
+                currentUser, so the newly returned score
+                can correctly become YOU.
             */
 
             await loadLeaderboard();
@@ -4150,9 +4396,16 @@
 
             /*
                 Load the public leaderboard immediately.
-                It will initially show masked names.
-                After login, the matching user's entry
-                will automatically become YOU.
+
+                Before login:
+                    all names are masked.
+
+                After login:
+                    the verified Pi username is used to
+                    identify the current player's entry as YOU.
+
+                If the production API includes UID, UID is
+                preferred automatically.
             */
 
             await loadLeaderboard();
