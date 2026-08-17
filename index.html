@@ -13,6 +13,11 @@
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
 
     <style>
+
+        /* =========================================================
+           RESET
+        ========================================================= */
+
         * {
             margin: 0;
             padding: 0;
@@ -35,7 +40,7 @@
                 Arial,
                 sans-serif;
 
-            color: #fff;
+            color: #ffffff;
 
             background:
                 radial-gradient(
@@ -43,16 +48,19 @@
                     rgba(127, 61, 255, 0.45),
                     transparent 30%
                 ),
+
                 radial-gradient(
                     circle at 80% 20%,
                     rgba(0, 179, 255, 0.30),
                     transparent 30%
                 ),
+
                 radial-gradient(
                     circle at 50% 100%,
                     rgba(102, 38, 255, 0.35),
                     transparent 40%
                 ),
+
                 linear-gradient(
                     145deg,
                     #09001f 0%,
@@ -86,6 +94,7 @@
                     rgba(255,255,255,0.8) 1px,
                     transparent 1px
                 ),
+
                 radial-gradient(
                     circle,
                     rgba(255,255,255,0.45) 1px,
@@ -108,6 +117,11 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+
+        /* =========================================================
+           MAIN APP
+        ========================================================= */
+
         .app {
             width: min(100%, 1100px);
             position: relative;
@@ -125,6 +139,7 @@
                 );
 
             border: 1px solid rgba(255,255,255,0.18);
+
             border-radius: 32px;
 
             padding: 28px;
@@ -137,20 +152,27 @@
             -webkit-backdrop-filter: blur(25px);
         }
 
-        /* HEADER */
+
+        /* =========================================================
+           HEADER
+        ========================================================= */
 
         .top-header {
             display: flex;
+
             align-items: center;
             justify-content: space-between;
 
             gap: 20px;
+
             margin-bottom: 22px;
         }
 
         .brand {
             display: flex;
+
             align-items: center;
+
             gap: 14px;
         }
 
@@ -166,6 +188,8 @@
 
             font-size: 34px;
             font-weight: 900;
+
+            color: #ffffff;
 
             background:
                 linear-gradient(
@@ -184,31 +208,44 @@
         .brand-title {
             font-size: 25px;
             font-weight: 900;
+
             letter-spacing: -0.8px;
         }
 
         .brand-subtitle {
             color: rgba(255,255,255,0.62);
+
             font-size: 12px;
+
             margin-top: 3px;
+
             letter-spacing: 1.5px;
+
             text-transform: uppercase;
         }
 
         .tagline {
             text-align: right;
+
             color: rgba(255,255,255,0.75);
+
             font-size: 13px;
+
             line-height: 1.5;
         }
 
         .tagline strong {
             display: block;
+
             color: #ffd83d;
+
             font-size: 15px;
         }
 
-        /* AUTH */
+
+        /* =========================================================
+           AUTH
+        ========================================================= */
 
         .auth-area {
             display: block;
@@ -220,6 +257,7 @@
 
         .welcome-panel {
             text-align: center;
+
             padding: 34px 15px 20px;
         }
 
@@ -249,10 +287,12 @@
                 0 0 55px rgba(132,46,255,0.65),
                 inset 0 2px 0 rgba(255,255,255,0.35);
 
-            animation: floatingLogo 3s ease-in-out infinite;
+            animation:
+                floatingLogo 3s ease-in-out infinite;
         }
 
         @keyframes floatingLogo {
+
             0%, 100% {
                 transform: translateY(0);
             }
@@ -260,56 +300,68 @@
             50% {
                 transform: translateY(-7px);
             }
+
         }
 
         .welcome-title {
             font-size: clamp(42px, 8vw, 72px);
+
             font-weight: 950;
+
             line-height: 0.95;
+
             letter-spacing: -3px;
 
             background:
                 linear-gradient(
                     135deg,
-                    #fff 10%,
+                    #ffffff 10%,
                     #d8b8ff 45%,
                     #ffd83d 80%
                 );
 
             -webkit-background-clip: text;
             background-clip: text;
+
             color: transparent;
         }
 
         .welcome-description {
             max-width: 520px;
+
             margin: 15px auto 28px;
 
             color: rgba(255,255,255,0.68);
 
             font-size: 15px;
+
             line-height: 1.6;
         }
 
         .auth-buttons {
             width: min(100%, 420px);
+
             margin: auto;
 
             display: grid;
+
             gap: 12px;
         }
 
         .primary-button,
         .secondary-button {
             width: 100%;
+
             min-height: 54px;
 
             border: none;
+
             border-radius: 16px;
 
             color: white;
 
             font-size: 15px;
+
             font-weight: 800;
 
             cursor: pointer;
@@ -361,7 +413,9 @@
 
         button:disabled {
             opacity: 0.6;
+
             cursor: not-allowed;
+
             transform: none !important;
         }
 
@@ -384,6 +438,7 @@
             color: rgba(255,255,255,0.75);
 
             font-size: 13px;
+
             text-align: center;
         }
 
@@ -392,18 +447,29 @@
         }
 
         .auth-status.success {
-            border-color: rgba(63,255,151,0.4);
-            background: rgba(63,255,151,0.08);
+            border-color:
+                rgba(63,255,151,0.4);
+
+            background:
+                rgba(63,255,151,0.08);
+
             color: #9effc5;
         }
 
         .auth-status.error {
-            border-color: rgba(255,76,76,0.45);
-            background: rgba(255,76,76,0.08);
+            border-color:
+                rgba(255,76,76,0.45);
+
+            background:
+                rgba(255,76,76,0.08);
+
             color: #ffaaaa;
         }
 
-        /* GAME */
+
+        /* =========================================================
+           GAME
+        ========================================================= */
 
         .game-area {
             display: none;
@@ -411,12 +477,16 @@
 
         .game-area.active {
             display: block;
-            animation: gameEnter 0.45s ease-out;
+
+            animation:
+                gameEnter 0.45s ease-out;
         }
 
         @keyframes gameEnter {
+
             from {
                 opacity: 0;
+
                 transform:
                     translateY(15px)
                     scale(0.98);
@@ -424,10 +494,12 @@
 
             to {
                 opacity: 1;
+
                 transform:
                     translateY(0)
                     scale(1);
             }
+
         }
 
         .game-layout {
@@ -442,12 +514,20 @@
             align-items: start;
         }
 
+
+        /* =========================================================
+           GAME HEADER
+        ========================================================= */
+
         .game-title-row {
             display: flex;
+
             align-items: center;
+
             justify-content: space-between;
 
             gap: 15px;
+
             margin-bottom: 15px;
         }
 
@@ -455,19 +535,23 @@
             font-size: clamp(42px, 7vw, 64px);
 
             line-height: 0.9;
+
             font-weight: 950;
+
             letter-spacing: -3px;
 
             background:
                 linear-gradient(
                     135deg,
-                    #fff,
+                    #ffffff,
                     #d5b4ff 55%,
                     #ffd53c
                 );
 
             -webkit-background-clip: text;
+
             background-clip: text;
+
             color: transparent;
         }
 
@@ -475,7 +559,9 @@
             color: rgba(255,255,255,0.62);
 
             font-size: 12px;
+
             letter-spacing: 2px;
+
             text-transform: uppercase;
 
             margin-top: 6px;
@@ -499,11 +585,16 @@
             font-size: 12px;
 
             overflow: hidden;
+
             text-overflow: ellipsis;
+
             white-space: nowrap;
         }
 
-        /* SCORE */
+
+        /* =========================================================
+           SCORE
+        ========================================================= */
 
         .score-row {
             display: grid;
@@ -535,23 +626,45 @@
             overflow: hidden;
         }
 
+        .score-card::after {
+            content: "";
+
+            position: absolute;
+
+            width: 100px;
+            height: 100px;
+
+            right: -50px;
+            top: -60px;
+
+            background:
+                rgba(143,70,255,0.25);
+
+            filter: blur(25px);
+        }
+
         .score-label {
             position: relative;
+
             z-index: 1;
 
             display: block;
 
-            color: rgba(255,255,255,0.55);
+            color:
+                rgba(255,255,255,0.55);
 
             font-size: 10px;
+
             font-weight: 700;
 
             letter-spacing: 1.5px;
+
             text-transform: uppercase;
         }
 
         .score-value {
             position: relative;
+
             z-index: 1;
 
             display: block;
@@ -559,6 +672,7 @@
             margin-top: 3px;
 
             font-size: 25px;
+
             font-weight: 900;
 
             color: white;
@@ -568,17 +682,24 @@
         }
 
         .score-value.bump {
-            animation: scoreBump 0.25s ease;
+            animation:
+                scoreBump 0.25s ease;
         }
 
         @keyframes scoreBump {
+
             50% {
                 transform: scale(1.22);
+
                 color: #ffd83d;
             }
+
         }
 
-        /* BOARD */
+
+        /* =========================================================
+           BOARD
+        ========================================================= */
 
         .board-frame {
             position: relative;
@@ -622,9 +743,13 @@
                 );
 
             touch-action: none;
+
             user-select: none;
+
             -webkit-user-select: none;
+
             -webkit-touch-callout: none;
+
             overscroll-behavior: contain;
         }
 
@@ -632,10 +757,13 @@
             position: relative;
 
             width: 100%;
+
             aspect-ratio: 1;
 
             display: flex;
+
             align-items: center;
+
             justify-content: center;
 
             border-radius: 13px;
@@ -666,64 +794,182 @@
             overflow: hidden;
         }
 
+        .grid-cell::after {
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255,255,255,0.18),
+                    transparent 35%
+                );
+
+            opacity: 0.35;
+
+            pointer-events: none;
+        }
+
+
+        /* =========================================================
+           TILE COLORS
+        ========================================================= */
+
         .grid-cell[data-value="2"] {
-            background: linear-gradient(145deg,#fff4db,#f4d8a8);
+            background:
+                linear-gradient(
+                    145deg,
+                    #fff4db,
+                    #f4d8a8
+                );
+
             color: #70411c;
-            box-shadow: 0 5px 18px rgba(255,220,170,0.20);
+
+            box-shadow:
+                0 5px 18px rgba(255,220,170,0.20),
+                inset 0 1px 0 white;
         }
 
         .grid-cell[data-value="4"] {
-            background: linear-gradient(145deg,#fff0c2,#f4c968);
+            background:
+                linear-gradient(
+                    145deg,
+                    #fff0c2,
+                    #f4c968
+                );
+
             color: #75420d;
-            box-shadow: 0 5px 18px rgba(255,206,100,0.25);
+
+            box-shadow:
+                0 5px 18px rgba(255,206,100,0.25),
+                inset 0 1px 0 white;
         }
 
         .grid-cell[data-value="8"] {
-            background: linear-gradient(145deg,#ffbd5b,#ff751b);
+            background:
+                linear-gradient(
+                    145deg,
+                    #ffbd5b,
+                    #ff751b
+                );
+
             color: white;
-            box-shadow: 0 5px 20px rgba(255,126,31,0.35);
+
+            box-shadow:
+                0 5px 20px rgba(255,126,31,0.35);
         }
 
         .grid-cell[data-value="16"] {
-            background: linear-gradient(145deg,#ff9457,#ff3e35);
+            background:
+                linear-gradient(
+                    145deg,
+                    #ff9457,
+                    #ff3e35
+                );
+
             color: white;
-            box-shadow: 0 5px 20px rgba(255,73,49,0.38);
+
+            box-shadow:
+                0 5px 20px rgba(255,73,49,0.38);
         }
 
         .grid-cell[data-value="32"] {
-            background: linear-gradient(145deg,#ff6565,#ed1d46);
+            background:
+                linear-gradient(
+                    145deg,
+                    #ff6565,
+                    #ed1d46
+                );
+
             color: white;
-            box-shadow: 0 5px 20px rgba(237,29,70,0.40);
+
+            box-shadow:
+                0 5px 20px rgba(237,29,70,0.40);
         }
 
         .grid-cell[data-value="64"] {
-            background: linear-gradient(145deg,#ff4e75,#b90c62);
+            background:
+                linear-gradient(
+                    145deg,
+                    #ff4e75,
+                    #b90c62
+                );
+
             color: white;
-            box-shadow: 0 5px 22px rgba(255,36,112,0.45);
+
+            box-shadow:
+                0 5px 22px rgba(255,36,112,0.45);
         }
 
         .grid-cell[data-value="128"] {
-            background: linear-gradient(145deg,#ffd94a,#f4a900);
+            background:
+                linear-gradient(
+                    145deg,
+                    #ffd94a,
+                    #f4a900
+                );
+
             color: #6a3700;
-            font-size: clamp(18px,4vw,34px);
+
+            font-size:
+                clamp(18px, 4vw, 34px);
+
+            box-shadow:
+                0 5px 25px rgba(255,194,45,0.42);
         }
 
         .grid-cell[data-value="256"] {
-            background: linear-gradient(145deg,#ffe44e,#f09200);
+            background:
+                linear-gradient(
+                    145deg,
+                    #ffe44e,
+                    #f09200
+                );
+
             color: #632f00;
-            font-size: clamp(18px,4vw,34px);
+
+            font-size:
+                clamp(18px, 4vw, 34px);
+
+            box-shadow:
+                0 5px 25px rgba(255,193,24,0.48);
         }
 
         .grid-cell[data-value="512"] {
-            background: linear-gradient(145deg,#fff15b,#ff7800);
+            background:
+                linear-gradient(
+                    145deg,
+                    #fff15b,
+                    #ff7800
+                );
+
             color: #5c2900;
-            font-size: clamp(18px,4vw,34px);
+
+            font-size:
+                clamp(18px, 4vw, 34px);
+
+            box-shadow:
+                0 5px 25px rgba(255,164,0,0.52);
         }
 
         .grid-cell[data-value="1024"] {
-            background: linear-gradient(145deg,#ffdd48,#ff4e00);
+            background:
+                linear-gradient(
+                    145deg,
+                    #ffdd48,
+                    #ff4e00
+                );
+
             color: white;
-            font-size: clamp(16px,3.7vw,30px);
+
+            font-size:
+                clamp(16px, 3.7vw, 30px);
+
+            box-shadow:
+                0 5px 28px rgba(255,92,0,0.55);
         }
 
         .grid-cell[data-value="2048"] {
@@ -738,7 +984,8 @@
 
             color: white;
 
-            font-size: clamp(16px,3.7vw,30px);
+            font-size:
+                clamp(16px, 3.7vw, 30px);
 
             border:
                 2px solid rgba(255,255,255,0.75);
@@ -753,6 +1000,7 @@
         }
 
         @keyframes winningTile {
+
             from {
                 transform: scale(1);
             }
@@ -760,19 +1008,38 @@
             to {
                 transform: scale(1.035);
             }
+
         }
 
         .grid-cell[data-value="4096"] {
-            background: linear-gradient(145deg,#b044ff,#5312cf);
+            background:
+                linear-gradient(
+                    145deg,
+                    #b044ff,
+                    #5312cf
+                );
+
             color: white;
-            font-size: clamp(15px,3.5vw,28px);
+
+            font-size:
+                clamp(15px, 3.5vw, 28px);
+
+            box-shadow:
+                0 0 30px rgba(169,53,255,0.75);
         }
 
+
+        /* =========================================================
+           TILE ANIMATION
+        ========================================================= */
+
         .grid-cell.tile-new {
-            animation: tileNew 0.18s ease-out;
+            animation:
+                tileNew 0.18s ease-out;
         }
 
         @keyframes tileNew {
+
             0% {
                 transform: scale(0.45);
                 opacity: 0;
@@ -786,13 +1053,16 @@
                 transform: scale(1);
                 opacity: 1;
             }
+
         }
 
         .grid-cell.tile-merged {
-            animation: tileMerged 0.22s ease-out;
+            animation:
+                tileMerged 0.22s ease-out;
         }
 
         @keyframes tileMerged {
+
             0% {
                 transform: scale(1);
             }
@@ -804,9 +1074,13 @@
             100% {
                 transform: scale(1);
             }
+
         }
 
-        /* CONTROLS */
+
+        /* =========================================================
+           CONTROLS
+        ========================================================= */
 
         .controls {
             display: grid;
@@ -823,11 +1097,13 @@
             min-height: 52px;
 
             border: none;
+
             border-radius: 15px;
 
             color: white;
 
             font-size: 14px;
+
             font-weight: 850;
 
             cursor: pointer;
@@ -863,6 +1139,7 @@
 
         .control-button:hover {
             transform: translateY(-2px);
+
             filter: brightness(1.08);
         }
 
@@ -870,10 +1147,14 @@
             transform: scale(0.97);
         }
 
-        /* SIDE PANEL */
+
+        /* =========================================================
+           SIDE PANEL
+        ========================================================= */
 
         .side-panel {
             display: grid;
+
             gap: 14px;
         }
 
@@ -898,26 +1179,35 @@
 
         .glass-card h3 {
             font-size: 15px;
+
             margin-bottom: 14px;
         }
 
         .glass-card p {
-            color: rgba(255,255,255,0.63);
+            color:
+                rgba(255,255,255,0.63);
+
             font-size: 12px;
+
             line-height: 1.65;
         }
 
         .swipe-list {
             display: grid;
+
             gap: 8px;
         }
 
         .swipe-item {
             display: flex;
+
             align-items: center;
+
             gap: 10px;
 
-            color: rgba(255,255,255,0.72);
+            color:
+                rgba(255,255,255,0.72);
+
             font-size: 12px;
         }
 
@@ -928,6 +1218,7 @@
             flex: 0 0 32px;
 
             display: flex;
+
             align-items: center;
             justify-content: center;
 
@@ -945,12 +1236,15 @@
 
         .pi-message {
             color: #ffd83d !important;
+
             font-weight: 750;
         }
 
         .community-badge {
             display: inline-flex;
+
             align-items: center;
+
             gap: 6px;
 
             margin-top: 12px;
@@ -968,16 +1262,19 @@
             color: #ffe16a;
 
             font-size: 10px;
+
             font-weight: 800;
         }
 
-        /* LEADERBOARD */
+
+        /* =========================================================
+           LEADERBOARD
+        ========================================================= */
 
         .leaderboard-card {
-            margin-top: 18px;
-            padding: 20px;
+            padding: 19px;
 
-            border-radius: 22px;
+            border-radius: 20px;
 
             background:
                 linear-gradient(
@@ -987,74 +1284,69 @@
                 );
 
             border:
-                1px solid rgba(255,255,255,0.14);
+                1px solid rgba(255,255,255,0.13);
 
             box-shadow:
-                0 15px 35px rgba(0,0,0,0.22);
+                0 12px 30px rgba(0,0,0,0.20);
         }
 
         .leaderboard-header {
             display: flex;
+
             align-items: center;
+
             justify-content: space-between;
 
-            gap: 12px;
+            gap: 10px;
 
-            margin-bottom: 15px;
+            margin-bottom: 5px;
         }
 
-        .leaderboard-title {
-            font-size: 18px;
-            font-weight: 900;
+        .leaderboard-header h3 {
+            font-size: 17px;
         }
 
-        .leaderboard-subtitle {
-            margin-top: 3px;
+        .leaderboard-refresh {
+            width: 34px;
+            height: 34px;
 
-            color: rgba(255,255,255,0.48);
+            border: 1px solid rgba(255,255,255,0.12);
 
-            font-size: 10px;
-
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-        }
-
-        .refresh-button {
-            border: none;
-
-            min-width: 42px;
-            height: 38px;
-
-            border-radius: 11px;
+            border-radius: 10px;
 
             background:
-                linear-gradient(
-                    135deg,
-                    #7134ff,
-                    #238fff
-                );
+                rgba(255,255,255,0.08);
 
             color: white;
 
-            font-size: 17px;
             cursor: pointer;
 
+            font-size: 16px;
+
             transition:
-                transform 0.18s ease,
-                filter 0.18s ease;
+                transform 0.2s ease,
+                background 0.2s ease;
         }
 
-        .refresh-button:hover {
-            transform: translateY(-2px);
-            filter: brightness(1.1);
+        .leaderboard-refresh:hover {
+            transform: rotate(180deg);
+
+            background:
+                rgba(255,255,255,0.14);
         }
 
-        .refresh-button:active {
-            transform: scale(0.95);
+        .leaderboard-subtitle {
+            color:
+                rgba(255,255,255,0.48);
+
+            font-size: 10px;
+
+            margin-bottom: 13px;
         }
 
         .leaderboard-list {
             display: grid;
+
             gap: 7px;
         }
 
@@ -1062,157 +1354,124 @@
             display: grid;
 
             grid-template-columns:
-                42px
+                32px
                 minmax(0, 1fr)
                 auto;
 
             align-items: center;
 
-            gap: 10px;
+            gap: 8px;
 
-            min-height: 48px;
+            min-height: 44px;
 
-            padding: 7px 10px;
+            padding: 7px 9px;
 
-            border-radius: 13px;
+            border-radius: 12px;
 
             background:
-                rgba(255,255,255,0.055);
+                rgba(255,255,255,0.045);
 
             border:
                 1px solid rgba(255,255,255,0.06);
         }
 
-        .leaderboard-row.current-player {
+        .leaderboard-row.current-user {
             background:
                 linear-gradient(
                     135deg,
-                    rgba(141,56,255,0.25),
-                    rgba(35,143,255,0.13)
+                    rgba(255,216,61,0.14),
+                    rgba(132,54,255,0.12)
                 );
 
             border-color:
-                rgba(155,105,255,0.35);
+                rgba(255,216,61,0.22);
 
             box-shadow:
-                0 0 18px rgba(120,50,255,0.12);
+                inset 0 0 20px rgba(255,216,61,0.035);
         }
 
-        .rank {
+        .leaderboard-rank {
             display: flex;
+
             align-items: center;
+
             justify-content: center;
 
-            width: 32px;
-            height: 32px;
+            width: 30px;
+            height: 30px;
 
             border-radius: 9px;
 
             background:
                 rgba(255,255,255,0.07);
 
-            color:
-                rgba(255,255,255,0.65);
+            font-size: 13px;
 
-            font-size: 12px;
-            font-weight: 900;
+            font-weight: 850;
         }
 
-        .rank.top-one {
-            background:
-                linear-gradient(
-                    135deg,
-                    #ffd83d,
-                    #ff9f00
-                );
-
-            color: #5c3100;
-        }
-
-        .rank.top-two {
-            background:
-                linear-gradient(
-                    135deg,
-                    #e7ecf4,
-                    #9ba9bd
-                );
-
-            color: #273141;
-        }
-
-        .rank.top-three {
-            background:
-                linear-gradient(
-                    135deg,
-                    #e9a66b,
-                    #a85c28
-                );
-
-            color: #fff;
-        }
-
-        .leaderboard-player {
+        .leaderboard-name {
             min-width: 0;
 
             overflow: hidden;
+
             text-overflow: ellipsis;
+
             white-space: nowrap;
 
-            font-size: 13px;
+            color:
+                rgba(255,255,255,0.82);
+
+            font-size: 12px;
+
             font-weight: 750;
         }
 
-        .leaderboard-you {
-            display: inline-block;
-
-            margin-left: 5px;
-
-            padding: 2px 5px;
-
-            border-radius: 5px;
-
-            background:
-                rgba(255,216,61,0.12);
-
+        .leaderboard-row.current-user .leaderboard-name {
             color: #ffd83d;
-
-            font-size: 8px;
-            font-weight: 900;
-
-            text-transform: uppercase;
         }
 
         .leaderboard-score {
-            color: #ffd83d;
-            font-size: 14px;
+            color: white;
+
+            font-size: 13px;
+
             font-weight: 900;
+
+            white-space: nowrap;
         }
 
-        .leaderboard-loading,
         .leaderboard-empty,
+        .leaderboard-loading,
         .leaderboard-error {
-            padding: 18px 10px;
+            padding: 14px 5px;
 
             text-align: center;
 
             color:
-                rgba(255,255,255,0.55);
+                rgba(255,255,255,0.48);
 
-            font-size: 12px;
+            font-size: 11px;
+
+            line-height: 1.5;
         }
 
         .leaderboard-error {
             color: #ffaaaa;
         }
 
-        /* FOOTER */
+
+        /* =========================================================
+           FOOTER
+        ========================================================= */
 
         .footer {
             text-align: center;
 
             margin-top: 18px;
 
-            color: rgba(255,255,255,0.38);
+            color:
+                rgba(255,255,255,0.38);
 
             font-size: 11px;
         }
@@ -1221,14 +1480,20 @@
             color: #ffd83d;
         }
 
-        /* GAME OVER */
+
+        /* =========================================================
+           GAME OVER
+        ========================================================= */
 
         .game-over {
             position: fixed;
+
             inset: 0;
 
             display: flex;
+
             align-items: center;
+
             justify-content: center;
 
             padding: 20px;
@@ -1237,11 +1502,13 @@
                 rgba(5,0,25,0.78);
 
             backdrop-filter: blur(12px);
+
             -webkit-backdrop-filter: blur(12px);
 
             z-index: 1000;
 
             opacity: 0;
+
             visibility: hidden;
 
             transition:
@@ -1251,6 +1518,7 @@
 
         .game-over.show {
             opacity: 1;
+
             visibility: visible;
         }
 
@@ -1293,22 +1561,28 @@
 
         .game-over-icon {
             font-size: 54px;
+
             margin-bottom: 8px;
         }
 
         .game-over h2 {
             font-size: 34px;
+
             margin-bottom: 8px;
         }
 
         .game-over p {
-            color: rgba(255,255,255,0.65);
+            color:
+                rgba(255,255,255,0.65);
+
             margin-bottom: 23px;
         }
 
         .final-score {
             color: #ffd83d;
+
             font-weight: 900;
+
             font-size: 19px;
         }
 
@@ -1316,9 +1590,11 @@
             min-height: 20px;
 
             margin-top: -10px;
+
             margin-bottom: 15px;
 
-            color: rgba(255,255,255,0.65);
+            color:
+                rgba(255,255,255,0.65);
 
             font-size: 12px;
         }
@@ -1333,9 +1609,11 @@
 
         .play-again {
             width: 100%;
+
             min-height: 54px;
 
             border: none;
+
             border-radius: 15px;
 
             color: white;
@@ -1348,6 +1626,7 @@
                 );
 
             font-size: 15px;
+
             font-weight: 850;
 
             cursor: pointer;
@@ -1356,16 +1635,22 @@
                 0 10px 25px rgba(255,132,0,0.3);
         }
 
-        /* MOBILE */
+
+        /* =========================================================
+           MOBILE
+        ========================================================= */
 
         @media (max-width: 800px) {
+
             body {
                 padding: 10px;
+
                 align-items: flex-start;
             }
 
             .app-shell {
                 padding: 17px;
+
                 border-radius: 24px;
             }
 
@@ -1374,7 +1659,8 @@
             }
 
             .side-panel {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns:
+                    1fr 1fr;
             }
 
             .top-header {
@@ -1384,11 +1670,14 @@
             .tagline {
                 display: none;
             }
+
         }
 
         @media (max-width: 520px) {
+
             .app-shell {
                 padding: 12px;
+
                 border-radius: 21px;
             }
 
@@ -1401,6 +1690,7 @@
                 height: 46px;
 
                 border-radius: 14px;
+
                 font-size: 27px;
             }
 
@@ -1422,7 +1712,9 @@
 
             .user-badge {
                 max-width: 130px;
+
                 font-size: 10px;
+
                 padding: 8px 10px;
             }
 
@@ -1440,18 +1732,23 @@
 
             .board-frame {
                 padding: 7px;
+
                 border-radius: 20px;
             }
 
             .grid-container {
                 gap: 6px;
+
                 padding: 6px;
+
                 border-radius: 15px;
             }
 
             .grid-cell {
                 border-radius: 10px;
-                font-size: clamp(21px, 8vw, 32px);
+
+                font-size:
+                    clamp(21px, 8vw, 32px);
             }
 
             .controls {
@@ -1460,6 +1757,7 @@
 
             .control-button {
                 min-height: 48px;
+
                 font-size: 13px;
             }
 
@@ -1467,41 +1765,26 @@
                 grid-template-columns: 1fr;
             }
 
-            .glass-card {
-                padding: 15px;
-            }
-
+            .glass-card,
             .leaderboard-card {
                 padding: 15px;
-            }
-
-            .leaderboard-row {
-                grid-template-columns:
-                    38px
-                    minmax(0, 1fr)
-                    auto;
-            }
-
-            .leaderboard-player {
-                font-size: 12px;
-            }
-
-            .leaderboard-score {
-                font-size: 13px;
             }
 
             .footer {
                 margin-bottom: 4px;
             }
+
         }
 
         @media (max-width: 370px) {
+
             .app-shell {
                 padding: 9px;
             }
 
             .grid-container {
                 gap: 5px;
+
                 padding: 5px;
             }
 
@@ -1512,9 +1795,12 @@
             .game-title {
                 font-size: 43px;
             }
+
         }
+
     </style>
 </head>
+
 
 <body>
 
@@ -1522,7 +1808,9 @@
 
     <div class="app-shell">
 
-        <!-- HEADER -->
+        <!-- =====================================================
+             HEADER
+        ====================================================== -->
 
         <header class="top-header">
 
@@ -1559,7 +1847,9 @@
         </header>
 
 
-        <!-- AUTHENTICATION -->
+        <!-- =====================================================
+             AUTHENTICATION
+        ====================================================== -->
 
         <section
             class="auth-area"
@@ -1615,7 +1905,9 @@
         </section>
 
 
-        <!-- GAME -->
+        <!-- =====================================================
+             GAME AREA
+        ====================================================== -->
 
         <section
             class="game-area"
@@ -1739,6 +2031,14 @@
 
                     </div>
 
+                </main>
+
+
+                <!-- =================================================
+                     SIDE PANEL
+                ================================================== -->
+
+                <aside class="side-panel">
 
                     <!-- LEADERBOARD -->
 
@@ -1746,28 +2046,23 @@
 
                         <div class="leaderboard-header">
 
-                            <div>
-
-                                <div class="leaderboard-title">
-                                    🏆 Leaderboard
-                                </div>
-
-                                <div class="leaderboard-subtitle">
-                                    Top 10 Pi 2048 Players
-                                </div>
-
-                            </div>
+                            <h3>
+                                🏆 Leaderboard
+                            </h3>
 
                             <button
-                                class="refresh-button"
-                                id="refreshLeaderboardBtn"
+                                class="leaderboard-refresh"
+                                id="leaderboardRefresh"
                                 onclick="loadLeaderboard()"
                                 title="Refresh leaderboard"
-                                aria-label="Refresh leaderboard"
                             >
                                 ↻
                             </button>
 
+                        </div>
+
+                        <div class="leaderboard-subtitle">
+                            Top 10 Pi 2048 Players
                         </div>
 
                         <div
@@ -1783,12 +2078,6 @@
 
                     </div>
 
-                </main>
-
-
-                <!-- SIDE PANEL -->
-
-                <aside class="side-panel">
 
                     <div class="glass-card">
 
@@ -1799,23 +2088,51 @@
                         <div class="swipe-list">
 
                             <div class="swipe-item">
-                                <div class="swipe-icon">↑</div>
-                                <span>Swipe Up</span>
+
+                                <div class="swipe-icon">
+                                    ↑
+                                </div>
+
+                                <span>
+                                    Swipe Up
+                                </span>
+
                             </div>
 
                             <div class="swipe-item">
-                                <div class="swipe-icon">↓</div>
-                                <span>Swipe Down</span>
+
+                                <div class="swipe-icon">
+                                    ↓
+                                </div>
+
+                                <span>
+                                    Swipe Down
+                                </span>
+
                             </div>
 
                             <div class="swipe-item">
-                                <div class="swipe-icon">←</div>
-                                <span>Swipe Left</span>
+
+                                <div class="swipe-icon">
+                                    ←
+                                </div>
+
+                                <span>
+                                    Swipe Left
+                                </span>
+
                             </div>
 
                             <div class="swipe-item">
-                                <div class="swipe-icon">→</div>
-                                <span>Swipe Right</span>
+
+                                <div class="swipe-icon">
+                                    →
+                                </div>
+
+                                <span>
+                                    Swipe Right
+                                </span>
+
                             </div>
 
                         </div>
@@ -1885,7 +2202,9 @@
 </div>
 
 
-<!-- GAME OVER -->
+<!-- ============================================================
+     GAME OVER
+============================================================= -->
 
 <div
     class="game-over"
@@ -1971,9 +2290,13 @@
     let touchTracking = false;
 
 
-    /* =========================================================
-       BACKEND
-    ========================================================= */
+    /*
+        Same Vercel deployment.
+
+        /api/auth/validate
+        /api/score
+        /api/leaderboard
+    */
 
     const BACKEND_URL = "";
 
@@ -2027,10 +2350,8 @@
     const leaderboardList =
         document.getElementById("leaderboardList");
 
-    const refreshLeaderboardBtn =
-        document.getElementById(
-            "refreshLeaderboardBtn"
-        );
+    const leaderboardRefresh =
+        document.getElementById("leaderboardRefresh");
 
 
     bestElement.textContent = best;
@@ -2220,6 +2541,14 @@
 
             startGame();
 
+            /*
+                Load leaderboard after the authenticated
+                user's UID is known so we can display
+                YOU for their own entries.
+            */
+
+            await loadLeaderboard();
+
         } catch (error) {
 
             console.error(
@@ -2228,7 +2557,9 @@
             );
 
             currentUser = null;
+
             accessToken = null;
+
             isAuthenticated = false;
 
             setAuthStatus(
@@ -2344,6 +2675,14 @@
 
         startGame();
 
+        /*
+            Demo users cannot access private identity
+            information. The public leaderboard can
+            still be displayed.
+        */
+
+        loadLeaderboard();
+
     }
 
 
@@ -2362,12 +2701,6 @@
         );
 
         newGame();
-
-        /*
-         * Load the global leaderboard
-         * whenever the game screen opens.
-         */
-        loadLeaderboard();
 
     }
 
@@ -2410,6 +2743,13 @@
             "normal"
         );
 
+        /*
+            Reload the public leaderboard so no
+            previous user remains marked as YOU.
+        */
+
+        loadLeaderboard();
+
     }
 
 
@@ -2425,6 +2765,411 @@
             "Pi user validation error:",
             error
         );
+
+    }
+
+
+    /* =========================================================
+       MASK USERNAME
+       
+       Example:
+
+       joshuadelacruz
+       -> jos***ruz
+
+       john
+       -> jo**hn
+
+       ab
+       -> **
+
+    ========================================================= */
+
+    function maskUsername(
+        username
+    ) {
+
+        if (
+            typeof username !== "string"
+        ) {
+
+            return "***";
+
+        }
+
+        const name =
+            username.trim();
+
+        if (!name) {
+
+            return "***";
+
+        }
+
+        if (name.length <= 2) {
+
+            return "*".repeat(
+                name.length
+            );
+
+        }
+
+        if (name.length <= 4) {
+
+            return (
+                name.charAt(0) +
+                "*".repeat(
+                    name.length - 2
+                ) +
+                name.charAt(
+                    name.length - 1
+                )
+            );
+
+        }
+
+        const first =
+            name.slice(
+                0,
+                3
+            );
+
+        const last =
+            name.slice(
+                -3
+            );
+
+        return (
+            first +
+            "***" +
+            last
+        );
+
+    }
+
+
+    /* =========================================================
+       FORMAT SCORE
+    ========================================================= */
+
+    function formatScore(
+        value
+    ) {
+
+        const number =
+            Number(value);
+
+        if (
+            !Number.isFinite(number)
+        ) {
+
+            return "0";
+
+        }
+
+        return number.toLocaleString(
+            "en-US"
+        );
+
+    }
+
+
+    /* =========================================================
+       LEADERBOARD
+    ========================================================= */
+
+    async function loadLeaderboard() {
+
+        if (!leaderboardList) {
+            return;
+        }
+
+        leaderboardList.innerHTML =
+            `
+                <div class="leaderboard-loading">
+                    Loading leaderboard...
+                </div>
+            `;
+
+        leaderboardRefresh.disabled =
+            true;
+
+        try {
+
+            const response =
+                await fetch(
+                    `${BACKEND_URL}/api/leaderboard`,
+                    {
+                        method: "GET",
+
+                        headers: {
+                            "Accept":
+                                "application/json"
+                        },
+
+                        cache: "no-store"
+                    }
+                );
+
+            let data = null;
+
+            try {
+
+                data =
+                    await response.json();
+
+            } catch (_) {
+
+                data = null;
+
+            }
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data?.error ||
+                    `Leaderboard request failed (${response.status})`
+                );
+
+            }
+
+            if (
+                !data ||
+                data.success !== true
+            ) {
+
+                throw new Error(
+                    data?.error ||
+                    "Invalid leaderboard response"
+                );
+
+            }
+
+            const leaderboard =
+                Array.isArray(
+                    data.leaderboard
+                )
+                    ? data.leaderboard
+                    : [];
+
+            renderLeaderboard(
+                leaderboard
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Leaderboard error:",
+                error
+            );
+
+            leaderboardList.innerHTML =
+                `
+                    <div class="leaderboard-error">
+                        ⚠️ Unable to load leaderboard.
+                    </div>
+                `;
+
+        } finally {
+
+            leaderboardRefresh.disabled =
+                false;
+
+        }
+
+    }
+
+
+    /* =========================================================
+       RENDER LEADERBOARD
+    ========================================================= */
+
+    function renderLeaderboard(
+        leaderboard
+    ) {
+
+        if (
+            !leaderboard.length
+        ) {
+
+            leaderboardList.innerHTML =
+                `
+                    <div class="leaderboard-empty">
+                        No scores yet.<br>
+                        Be the first Pi 2048 player!
+                    </div>
+                `;
+
+            return;
+
+        }
+
+
+        leaderboardList.innerHTML = "";
+
+
+        leaderboard
+            .slice(0, 10)
+            .forEach(
+                (
+                    entry,
+                    index
+                ) => {
+
+                    /*
+                        Compare the verified UID.
+
+                        IMPORTANT:
+                        We do NOT compare usernames.
+
+                        Example:
+
+                        currentUser.uid
+                        =
+                        5673cfee-08af-4bc8-8d59-8d94a56b6c3b
+
+                        entry.uid
+                        =
+                        5673cfee-08af-4bc8-8d59-8d94a56b6c3b
+
+                        Result:
+                        YOU
+                    */
+
+                    const isCurrentUser =
+                        Boolean(
+                            currentUser &&
+                            currentUser.uid &&
+                            entry.uid &&
+                            currentUser.uid === entry.uid
+                        );
+
+
+                    let displayName;
+
+
+                    if (
+                        isCurrentUser
+                    ) {
+
+                        displayName =
+                            "YOU";
+
+                    } else {
+
+                        displayName =
+                            maskUsername(
+                                entry.username
+                            );
+
+                    }
+
+
+                    const row =
+                        document.createElement(
+                            "div"
+                        );
+
+                    row.className =
+                        "leaderboard-row";
+
+
+                    if (
+                        isCurrentUser
+                    ) {
+
+                        row.classList.add(
+                            "current-user"
+                        );
+
+                    }
+
+
+                    const rank =
+                        document.createElement(
+                            "div"
+                        );
+
+                    rank.className =
+                        "leaderboard-rank";
+
+
+                    if (
+                        index === 0
+                    ) {
+
+                        rank.textContent =
+                            "🥇";
+
+                    } else if (
+                        index === 1
+                    ) {
+
+                        rank.textContent =
+                            "🥈";
+
+                    } else if (
+                        index === 2
+                    ) {
+
+                        rank.textContent =
+                            "🥉";
+
+                    } else {
+
+                        rank.textContent =
+                            String(
+                                index + 1
+                            );
+
+                    }
+
+
+                    const name =
+                        document.createElement(
+                            "div"
+                        );
+
+                    name.className =
+                        "leaderboard-name";
+
+                    name.textContent =
+                        displayName;
+
+
+                    const scoreValue =
+                        document.createElement(
+                            "div"
+                        );
+
+                    scoreValue.className =
+                        "leaderboard-score";
+
+                    scoreValue.textContent =
+                        formatScore(
+                            entry.score
+                        );
+
+
+                    row.appendChild(
+                        rank
+                    );
+
+                    row.appendChild(
+                        name
+                    );
+
+                    row.appendChild(
+                        scoreValue
+                    );
+
+
+                    leaderboardList.appendChild(
+                        row
+                    );
+
+                }
+            );
 
     }
 
@@ -2477,7 +3222,10 @@
         const empty =
             grid
                 .map(
-                    (value, index) =>
+                    (
+                        value,
+                        index
+                    ) =>
                         value === 0
                             ? index
                             : null
@@ -2611,6 +3359,7 @@
 
         let gainedScore = 0;
 
+
         if (
             direction === "left" ||
             direction === "right"
@@ -2726,15 +3475,20 @@
 
         }
 
+
         const moved =
             !arraysEqual(
                 oldGrid,
                 newGrid
             );
 
+
         if (!moved) {
+
             return;
+
         }
+
 
         grid =
             newGrid;
@@ -2771,6 +3525,7 @@
 
         let gainedScore = 0;
 
+
         for (
             let i = 0;
             i < filtered.length;
@@ -2778,8 +3533,10 @@
         ) {
 
             if (
-                i < filtered.length - 1 &&
-                filtered[i] === filtered[i + 1]
+                i <
+                    filtered.length - 1 &&
+                filtered[i] ===
+                    filtered[i + 1]
             ) {
 
                 const merged =
@@ -2804,6 +3561,7 @@
 
         }
 
+
         while (
             result.length < 4
         ) {
@@ -2811,6 +3569,7 @@
             result.push(0);
 
         }
+
 
         return {
             line: result,
@@ -2925,6 +3684,7 @@
 
         }
 
+
         if (
             !canMove()
         ) {
@@ -2969,7 +3729,8 @@
 
             if (
                 i % 4 < 3 &&
-                grid[i] === grid[i + 1]
+                grid[i] ===
+                    grid[i + 1]
             ) {
 
                 return true;
@@ -2978,7 +3739,8 @@
 
             if (
                 i < 12 &&
-                grid[i] === grid[i + 4]
+                grid[i] ===
+                    grid[i + 4]
             ) {
 
                 return true;
@@ -3020,10 +3782,6 @@
 
     async function submitScore() {
 
-        /*
-         * Demo scores are never submitted.
-         */
-
         if (
             !isAuthenticated ||
             !accessToken ||
@@ -3037,9 +3795,6 @@
 
         }
 
-        /*
-         * Prevent duplicate submission.
-         */
 
         if (
             scoreSubmitted
@@ -3049,9 +3804,6 @@
 
         }
 
-        /*
-         * Prevent zero score.
-         */
 
         if (
             score <= 0
@@ -3061,13 +3813,16 @@
 
         }
 
+
         scoreSubmitted = true;
+
 
         scoreSaveStatus.className =
             "score-save-status";
 
         scoreSaveStatus.textContent =
             "💾 Saving your score...";
+
 
         try {
 
@@ -3083,16 +3838,20 @@
                         },
 
                         body: JSON.stringify({
+
                             accessToken:
                                 accessToken,
 
                             score:
                                 score
+
                         })
                     }
                 );
 
+
             let data = null;
+
 
             try {
 
@@ -3105,6 +3864,7 @@
 
             }
 
+
             if (
                 !response.ok
             ) {
@@ -3116,22 +3876,30 @@
 
             }
 
+
             scoreSaveStatus.className =
                 "score-save-status success";
 
             scoreSaveStatus.textContent =
                 "✓ Score saved to the leaderboard!";
 
+
             console.log(
                 "Score saved successfully:",
                 data
             );
 
+
             /*
-             * Refresh leaderboard after
-             * successful score submission.
-             */
+                Refresh leaderboard immediately after
+                successfully saving the score.
+
+                This allows the new score to appear
+                without refreshing the entire page.
+            */
+
             await loadLeaderboard();
+
 
         } catch (error) {
 
@@ -3149,320 +3917,6 @@
             );
 
         }
-
-    }
-
-
-    /* =========================================================
-       LEADERBOARD
-    ========================================================= */
-
-    async function loadLeaderboard() {
-
-        if (!leaderboardList) {
-            return;
-        }
-
-        /*
-         * Show loading state.
-         */
-
-        leaderboardList.innerHTML = `
-            <div class="leaderboard-loading">
-                Loading leaderboard...
-            </div>
-        `;
-
-        if (refreshLeaderboardBtn) {
-
-            refreshLeaderboardBtn.disabled =
-                true;
-
-            refreshLeaderboardBtn.textContent =
-                "⟳";
-
-        }
-
-        try {
-
-            const response =
-                await fetch(
-                    `${BACKEND_URL}/api/leaderboard`,
-                    {
-                        method: "GET",
-
-                        headers: {
-                            "Accept":
-                                "application/json"
-                        },
-
-                        cache: "no-store"
-                    }
-                );
-
-            let data = null;
-
-            try {
-
-                data =
-                    await response.json();
-
-            } catch (_) {
-
-                data = null;
-
-            }
-
-            if (
-                !response.ok
-            ) {
-
-                throw new Error(
-                    data?.error ||
-                    `Leaderboard request failed (${response.status})`
-                );
-
-            }
-
-            if (
-                !data ||
-                !data.success ||
-                !Array.isArray(
-                    data.leaderboard
-                )
-            ) {
-
-                throw new Error(
-                    "Invalid leaderboard response."
-                );
-
-            }
-
-            renderLeaderboard(
-                data.leaderboard
-            );
-
-        } catch (error) {
-
-            console.error(
-                "Leaderboard error:",
-                error
-            );
-
-            leaderboardList.innerHTML = `
-                <div class="leaderboard-error">
-                    ⚠️ Unable to load leaderboard.
-                    <br>
-                    Please try again.
-                </div>
-            `;
-
-        } finally {
-
-            if (refreshLeaderboardBtn) {
-
-                refreshLeaderboardBtn.disabled =
-                    false;
-
-                refreshLeaderboardBtn.textContent =
-                    "↻";
-
-            }
-
-        }
-
-    }
-
-
-    /* =========================================================
-       RENDER LEADERBOARD
-    ========================================================= */
-
-    function renderLeaderboard(
-        leaderboard
-    ) {
-
-        if (
-            !leaderboard ||
-            leaderboard.length === 0
-        ) {
-
-            leaderboardList.innerHTML = `
-                <div class="leaderboard-empty">
-                    🏆 No scores yet.
-                    <br>
-                    Be the first to reach the leaderboard!
-                </div>
-            `;
-
-            return;
-
-        }
-
-        leaderboardList.innerHTML = "";
-
-        leaderboard.forEach(
-            (player, index) => {
-
-                const row =
-                    document.createElement(
-                        "div"
-                    );
-
-                row.className =
-                    "leaderboard-row";
-
-                /*
-                 * Highlight the logged-in player.
-                 */
-                const isCurrentPlayer =
-                    isAuthenticated &&
-                    currentUser &&
-                    typeof currentUser.username === "string" &&
-                    currentUser.username.toLowerCase() ===
-                        String(
-                            player.username || ""
-                        ).toLowerCase();
-
-                if (
-                    isCurrentPlayer
-                ) {
-
-                    row.classList.add(
-                        "current-player"
-                    );
-
-                }
-
-                /*
-                 * Rank.
-                 */
-                const rank =
-                    document.createElement(
-                        "div"
-                    );
-
-                rank.className =
-                    "rank";
-
-                if (
-                    index === 0
-                ) {
-
-                    rank.classList.add(
-                        "top-one"
-                    );
-
-                    rank.textContent =
-                        "🥇";
-
-                } else if (
-                    index === 1
-                ) {
-
-                    rank.classList.add(
-                        "top-two"
-                    );
-
-                    rank.textContent =
-                        "🥈";
-
-                } else if (
-                    index === 2
-                ) {
-
-                    rank.classList.add(
-                        "top-three"
-                    );
-
-                    rank.textContent =
-                        "🥉";
-
-                } else {
-
-                    rank.textContent =
-                        String(index + 1);
-
-                }
-
-
-                /*
-                 * Username.
-                 *
-                 * textContent is deliberately used
-                 * instead of innerHTML so usernames
-                 * cannot inject HTML.
-                 */
-                const playerName =
-                    document.createElement(
-                        "div"
-                    );
-
-                playerName.className =
-                    "leaderboard-player";
-
-                playerName.textContent =
-                    player.username ||
-                    "Unknown Player";
-
-
-                if (
-                    isCurrentPlayer
-                ) {
-
-                    const you =
-                        document.createElement(
-                            "span"
-                        );
-
-                    you.className =
-                        "leaderboard-you";
-
-                    you.textContent =
-                        "YOU";
-
-                    playerName.appendChild(
-                        you
-                    );
-
-                }
-
-
-                /*
-                 * Score.
-                 */
-                const playerScore =
-                    document.createElement(
-                        "div"
-                    );
-
-                playerScore.className =
-                    "leaderboard-score";
-
-                playerScore.textContent =
-                    Number(
-                        player.score || 0
-                    ).toLocaleString();
-
-
-                row.appendChild(
-                    rank
-                );
-
-                row.appendChild(
-                    playerName
-                );
-
-                row.appendChild(
-                    playerScore
-                );
-
-                leaderboardList.appendChild(
-                    row
-                );
-
-            }
-        );
 
     }
 
@@ -3690,7 +4144,20 @@
 
     window.addEventListener(
         "load",
-        initPiSDK
+        async function() {
+
+            await initPiSDK();
+
+            /*
+                Load the public leaderboard immediately.
+                It will initially show masked names.
+                After login, the matching user's entry
+                will automatically become YOU.
+            */
+
+            await loadLeaderboard();
+
+        }
     );
 
 </script>
