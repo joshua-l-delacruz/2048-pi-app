@@ -1,0 +1,10 @@
+/.bundle
+/.env
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+/storage/*
+/vendor/bundle
+*.sqlite3
+

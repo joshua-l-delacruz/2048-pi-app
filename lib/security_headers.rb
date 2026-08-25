@@ -1,0 +1,31 @@
+class SecurityHeaders
+  CONTENT_SECURITY_POLICY = [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' https://sdk.minepi.com",
+    "style-src 'self' 'unsafe-inline'",
+    "connect-src 'self' https://api.minepi.com",
+    "img-src 'self' data:",
+    "font-src 'self'",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "frame-ancestors 'none'"
+  ].join("; ").freeze
+
+  def initialize(app)
+    @app = app
+  end
+
+  def call(env)
+    status, headers, body = @app.call(env)
+    headers["Content-Security-Policy"] = CONTENT_SECURITY_POLICY
+    headers["Cross-Origin-Opener-Policy"] = "same-origin"
+    headers["Cross-Origin-Resource-Policy"] = "same-origin"
+    headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+    headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    headers["X-Content-Type-Options"] = "nosniff"
+    headers["X-Frame-Options"] = "DENY"
+    headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains" if ENV["RAILS_ENV"] == "production"
+    [status, headers, body]
+  end
+end
