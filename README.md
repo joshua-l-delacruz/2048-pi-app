@@ -1,4 +1,4 @@
-# 2048 Pi Network — Rails Edition
+# 2048 Pi Network - Rails Edition
 
 A secure Ruby on Rails backend for the existing 2048 Pi Network game. Rails serves the game, validates Pi access tokens with the official Pi API, stores scores in PostgreSQL, and exposes a deduplicated leaderboard.
 
