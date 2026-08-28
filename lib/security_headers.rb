@@ -24,6 +24,7 @@ class SecurityHeaders
     headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
     headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     headers["X-Content-Type-Options"] = "nosniff"
+    headers["X-XSS-Protection"] = "0"
     headers["X-Frame-Options"] = "DENY"
     headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains" if ENV["RAILS_ENV"] == "production"
     [status, headers, body]
