@@ -8,9 +8,21 @@
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     >
 
-    <title>Pi 2048</title>
+    <title>Pi 2048 Network Game | Joshua Dela Cruz</title>
 
-    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+    <meta
+        name="description"
+        content="Play Pi 2048, a responsive Pi Network mini game with demo mode, personal best tracking, Pi authentication and a privacy-conscious leaderboard."
+    >
+    <link rel="canonical" href="https://2048.joshuadelacruz.solutions/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Pi 2048 Network Game | Joshua Dela Cruz">
+    <meta property="og:description" content="Merge tiles, track your best score and compete on a Pi-authenticated leaderboard.">
+    <meta property="og:url" content="https://2048.joshuadelacruz.solutions/">
+    <meta name="twitter:card" content="summary">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%237c3aed'/%3E%3Ctext x='32' y='44' text-anchor='middle' font-size='42' font-weight='700' fill='white'%3E%CF%80%3C/text%3E%3C/svg%3E">
+
+    <script defer src="https://sdk.minepi.com/pi-sdk.js"></script>
 
     <style>
 
@@ -4127,12 +4139,6 @@
 
             scoreSaveStatus.textContent =
                 "✓ Score saved to the leaderboard!";
-
-
-            console.log(
-                "Score saved successfully:",
-                data
-            );
 
 
             /*
