@@ -11,6 +11,10 @@ A secure Ruby on Rails backend for the existing 2048 Pi Network game. Rails serv
 - Render-compatible deployment
 - Cloudflare DNS, TLS, WAF, caching, and rate limiting
 
+## Production deployment
+
+The repository's Render Blueprint provisions both the Rails web service and its PostgreSQL database. The legacy Vercel URL can serve the static game shell, but it cannot run this Rails backend; deploy the Blueprint and use the Render or custom-domain URL for Pi authentication, score persistence, and leaderboard APIs.
+
 ## API
 
 - `POST /api/auth/validate` — validates a Pi access token

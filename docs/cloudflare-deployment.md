@@ -4,13 +4,13 @@ Cloudflare Workers cannot run a Ruby on Rails server directly. This architecture
 
 ## 1. Provision PostgreSQL
 
-Create a managed PostgreSQL database on Render, Neon, or another provider. Copy its private or pooled connection string into the Render service as `DATABASE_URL`.
+The repository Blueprint provisions `2048-pi-postgres` and injects its private connection string into the Rails service as `DATABASE_URL`. If the selected Render workspace does not offer the declared plan, choose an available PostgreSQL plan before applying the Blueprint.
 
 ## 2. Deploy the Rails service
 
 1. Connect this GitHub repository to Render.
 2. Choose **Blueprint** and use the repository's `render.yaml`.
-3. Add `DATABASE_URL`.
+3. Review the web-service and PostgreSQL plans.
 4. Deploy. The container entrypoint runs `bin/rails db:prepare` before Puma starts.
 5. Confirm `https://YOUR-RENDER-HOST/health` returns a successful response.
 
