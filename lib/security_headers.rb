@@ -1,8 +1,8 @@
 class SecurityHeaders
   CONTENT_SECURITY_POLICY = [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' https://sdk.minepi.com",
-    "style-src 'self' 'unsafe-inline'",
+    "script-src 'self' https://sdk.minepi.com 'sha256-/oFvYGszq80h8xoxbmQ8PvVeoDcLZTpTj3UJGUCMC0g='",
+    "style-src 'self' 'sha256-k4VA9BE5janXvI3yvfK0eo5LMM9h12VFfrcJfFreOfU='",
     "connect-src 'self' https://api.minepi.com",
     "img-src 'self' data:",
     "font-src 'self'",
@@ -26,7 +26,6 @@ class SecurityHeaders
     headers["X-Content-Type-Options"] = "nosniff"
     headers["X-XSS-Protection"] = "0"
     headers["X-Frame-Options"] = "DENY"
-    headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains" if ENV["RAILS_ENV"] == "production"
     [status, headers, body]
   end
 end
