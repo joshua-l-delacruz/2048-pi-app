@@ -1897,7 +1897,6 @@
                     <button
                         class="primary-button"
                         id="loginBtn"
-                        onclick="handleLogin()"
                     >
                         🔐 &nbsp; Login with Pi
                     </button>
@@ -1905,7 +1904,6 @@
                     <button
                         class="secondary-button"
                         id="demoBtn"
-                        onclick="startDemoGame()"
                     >
                         🎮 &nbsp; Play Demo
                     </button>
@@ -2029,14 +2027,14 @@
 
                         <button
                             class="control-button new-game-button"
-                            onclick="newGame()"
+                            id="newGameBtn"
                         >
                             ↻ &nbsp; New Game
                         </button>
 
                         <button
                             class="control-button logout-button"
-                            onclick="logoutUser()"
+                            id="logoutBtn"
                         >
                             ⇥ &nbsp; Logout
                         </button>
@@ -2065,7 +2063,6 @@
                             <button
                                 class="leaderboard-refresh"
                                 id="leaderboardRefresh"
-                                onclick="loadLeaderboard()"
                                 title="Refresh leaderboard"
                             >
                                 ↻
@@ -2257,7 +2254,6 @@
         <button
             class="play-again"
             id="playAgainBtn"
-            onclick="newGame()"
         >
             🎮 &nbsp; Play Again
         </button>
@@ -2343,6 +2339,15 @@
     const loginBtn =
         document.getElementById("loginBtn");
 
+    const demoBtn =
+        document.getElementById("demoBtn");
+
+    const newGameBtn =
+        document.getElementById("newGameBtn");
+
+    const logoutBtn =
+        document.getElementById("logoutBtn");
+
     const userInfo =
         document.getElementById("userInfo");
 
@@ -2375,6 +2380,13 @@
 
     const leaderboardRefresh =
         document.getElementById("leaderboardRefresh");
+
+    loginBtn.addEventListener("click", handleLogin);
+    demoBtn.addEventListener("click", startDemoGame);
+    newGameBtn.addEventListener("click", newGame);
+    logoutBtn.addEventListener("click", logoutUser);
+    leaderboardRefresh.addEventListener("click", loadLeaderboard);
+    playAgainBtn.addEventListener("click", newGame);
 
 
     bestElement.textContent = best;
