@@ -6,10 +6,20 @@ services:
     healthCheckPath: /health
     envVars:
       - key: DATABASE_URL
-        sync: false
+        fromDatabase:
+          name: 2048-pi-postgres
+          property: connectionString
       - key: RAILS_ENV
         value: production
       - key: RAILS_SERVE_STATIC_FILES
         value: "true"
       - key: SECRET_KEY_BASE
         generateValue: true
+      - key: PI_API_URL
+        value: https://api.minepi.com/v2/me
+
+databases:
+  - name: 2048-pi-postgres
+    plan: free
+    databaseName: pi_game_production
+    user: pi_game
