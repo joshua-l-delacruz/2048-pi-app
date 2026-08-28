@@ -3,8 +3,9 @@ FROM ruby:3.3.6-slim AS build
 
 RUN apt-get update -qq && apt-get install --no-install-recommends -y build-essential libpq-dev git && rm -rf /var/lib/apt/lists/*
 WORKDIR /rails
+ENV BUNDLE_DEPLOYMENT=0 BUNDLE_PATH=/usr/local/bundle BUNDLE_WITHOUT="development:test"
 COPY Gemfile Gemfile.lock* ./
-RUN bundle config set without "development test" && bundle install
+RUN bundle install
 COPY . .
 RUN bundle exec bootsnap precompile app/ config/
 
