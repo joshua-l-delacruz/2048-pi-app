@@ -1,8 +1,8 @@
 class SecurityHeaders
   CONTENT_SECURITY_POLICY = [
     "default-src 'self'",
-    "script-src 'self' https://sdk.minepi.com 'sha256-/oFvYGszq80h8xoxbmQ8PvVeoDcLZTpTj3UJGUCMC0g='",
-    "style-src 'self' 'sha256-k4VA9BE5janXvI3yvfK0eo5LMM9h12VFfrcJfFreOfU='",
+    "script-src 'self' https://sdk.minepi.com 'sha256-qmuLXeu0927gu3NyjBajrNiC9+iKl3no/n+6jXdW3fU='",
+    "style-src 'self' 'sha256-0iPA50t5gDa94L8uSOmVL6Pptv9+1nM+BH7EkS919pY='",
     "connect-src 'self' https://api.minepi.com",
     "img-src 'self' data:",
     "font-src 'self'",
