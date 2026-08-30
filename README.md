@@ -1,5 +1,7 @@
 # 2048 Pi Network — Rails Edition
 
+[![CI](https://github.com/joshua-l-delacruz/2048-pi-app/actions/workflows/ci.yml/badge.svg)](https://github.com/joshua-l-delacruz/2048-pi-app/actions/workflows/ci.yml)
+
 A production-deployed 2048 game with Pi Network authentication, a Ruby on Rails API, PostgreSQL score storage, and a privacy-conscious leaderboard.
 
 **[Play the live application](https://2048.joshuadelacruz.solutions)**
@@ -16,9 +18,10 @@ A production-deployed 2048 game with Pi Network authentication, a Ruby on Rails 
 - Server-derived player identity rather than trust in a submitted username
 - Validated and rate-limited score submission
 - One best score per player in the top-10 leaderboard
-- Privacy-conscious display names and no-store API responses
+- Privacy-conscious display names, opaque player IDs, and no-store API responses
 - Containerized deployment with a database-aware health check
 - Defense-in-depth HTTP security headers at the Cloudflare edge
+- Automated request and service tests in GitHub Actions
 
 ## Request flow
 
@@ -46,9 +49,9 @@ The API also applies these controls:
 - Tokens are required, trimmed, and rejected when blank or longer than 4,096 characters.
 - Pi API connections require HTTPS and have explicit connection and read timeouts.
 - Scores must be integers from `0` through `10,000,000`.
-- A per-player 10-second cooldown limits repeated score submissions.
+- A transaction-scoped per-player advisory lock makes the 10-second submission cooldown atomic across concurrent requests.
 - Leaderboard rows are deduplicated by Pi UID, ordered deterministically, and limited to ten.
-- Public leaderboard usernames are masked.
+- Public leaderboard usernames are masked, while HMAC-derived player IDs support `YOU` highlighting without exposing raw Pi UIDs.
 - API responses use `Cache-Control: no-store`.
 - Cloudflare provides HTTPS enforcement, HSTS, CSP, clickjacking protection, MIME sniffing protection, referrer controls, and edge rate limiting.
 
@@ -56,13 +59,13 @@ The API also applies these controls:
 
 Authentication and player identity are server-verified. The current game score is still client-authoritative: the server validates the player's Pi identity, score type, score range, and submission frequency, but it does **not** replay every move or prove that the submitted score came from a legitimate game session.
 
-That distinction is deliberate and documented. A higher-assurance competitive release should add signed server-issued game sessions, idempotency keys, minimum-duration and move-count checks, progression validation, atomic rate limiting, and anomaly detection. The current leaderboard is suitable for a portfolio demonstration, not a prize-bearing competition.
+That distinction is deliberate and documented. A higher-assurance competitive release should add signed server-issued game sessions, idempotency keys, minimum-duration and move-count checks, progression validation, and anomaly detection. The current leaderboard is suitable for a portfolio demonstration, not a prize-bearing competition.
 
 ## API
 
 | Endpoint | Purpose | Important responses |
 | --- | --- | --- |
-| `POST /api/auth/validate` | Validate a Pi access token and return the verified user | `200`, `401`, `422`, `502` |
+| `POST /api/auth/validate` | Validate a Pi access token and return the verified user plus an opaque player ID | `200`, `401`, `422`, `502` |
 | `POST /api/score` | Revalidate the token and record a score | `201`, `401`, `422`, `429`, `502` |
 | `GET /api/leaderboard` | Return each player's best score, up to ten players | `200` |
 | `GET /health` | Check application and database availability | `200`, `503` |
@@ -83,7 +86,7 @@ Errors use a consistent JSON envelope with a stable machine-readable code and a 
 ## Local setup
 
 1. Copy `.env.example` to `.env`.
-2. Set `DATABASE_URL` for PostgreSQL and replace `SECRET_KEY_BASE` with a long random secret.
+2. Set `DATABASE_URL` for PostgreSQL and replace `SECRET_KEY_BASE` and `PLAYER_ID_SECRET` with separate long random secrets.
 3. Keep `PI_API_URL=https://api.minepi.com/v2/me` unless using an explicitly controlled test endpoint.
 4. Install Ruby 3.3.6 and Bundler.
 5. Run `bundle install`, `bin/rails db:prepare`, and `bin/rails server`.
@@ -96,6 +99,13 @@ Docker may also be used:
 ```text
 docker build -t 2048-pi-rails .
 docker run --rm -p 3000:3000 --env-file .env 2048-pi-rails
+```
+
+Run the automated test suite with:
+
+```text
+RAILS_ENV=test bin/rails db:prepare
+bin/rails test
 ```
 
 ## Production deployment
@@ -111,15 +121,16 @@ See [docs/cloudflare-deployment.md](docs/cloudflare-deployment.md) for deploymen
 - Confirm malformed and out-of-range scores return `422`.
 - Confirm rapid repeat submissions return `429`.
 - Confirm the leaderboard shows only the best score per UID and masks usernames.
+- Confirm the authenticated player's opaque ID marks only their row as `YOU`.
 - Confirm production responses retain the expected Cloudflare security headers.
 
 ## Roadmap
 
 - Server-issued game-session nonce and expiry
 - Move-count, duration, and score-progression validation
-- Atomic cooldown enforcement and idempotent submissions
+- Idempotent score submissions
 - Suspicious-score telemetry and moderation workflow
-- Automated request, model, and system tests in CI
+- Browser-level game and Pi SDK integration tests
 
 ## Portfolio scope
 

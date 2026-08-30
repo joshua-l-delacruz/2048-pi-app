@@ -19,7 +19,10 @@
     <meta property="og:title" content="Pi 2048 Network Game | Joshua Dela Cruz">
     <meta property="og:description" content="Merge tiles, track your best score and compete on a Pi-authenticated leaderboard.">
     <meta property="og:url" content="https://2048.joshuadelacruz.solutions/">
-    <meta name="twitter:card" content="summary">
+    <meta property="og:image" content="https://raw.githubusercontent.com/joshua-l-delacruz/lab-docs/main/assets/images/pi-2048-game.png">
+    <meta property="og:image:alt" content="Pi 2048 game interface">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/joshua-l-delacruz/lab-docs/main/assets/images/pi-2048-game.png">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%237c3aed'/%3E%3Ctext x='32' y='44' text-anchor='middle' font-size='42' font-weight='700' fill='white'%3E%CF%80%3C/text%3E%3C/svg%3E">
 
     <script defer src="https://sdk.minepi.com/pi-sdk.js"></script>
@@ -2659,7 +2662,7 @@
         if (!response.ok) {
 
             throw new Error(
-                data?.error ||
+                data?.error?.message ||
                 `Backend validation failed (${response.status})`
             );
 
@@ -2815,85 +2818,6 @@
 
 
     /* =========================================================
-       MASK USERNAME
-       
-       Example:
-
-       joshuadelacruz
-       -> jos***ruz
-
-       john
-       -> jo**hn
-
-       ab
-       -> **
-
-    ========================================================= */
-
-    function maskUsername(
-        username
-    ) {
-
-        if (
-            typeof username !== "string"
-        ) {
-
-            return "***";
-
-        }
-
-        const name =
-            username.trim();
-
-        if (!name) {
-
-            return "***";
-
-        }
-
-        if (name.length <= 2) {
-
-            return "*".repeat(
-                name.length
-            );
-
-        }
-
-        if (name.length <= 4) {
-
-            return (
-                name.charAt(0) +
-                "*".repeat(
-                    name.length - 2
-                ) +
-                name.charAt(
-                    name.length - 1
-                )
-            );
-
-        }
-
-        const first =
-            name.slice(
-                0,
-                3
-            );
-
-        const last =
-            name.slice(
-                -3
-            );
-
-        return (
-            first +
-            "***" +
-            last
-        );
-
-    }
-
-
-    /* =========================================================
        FORMAT SCORE
     ========================================================= */
 
@@ -2944,32 +2868,19 @@
 
 
     /*
-        Production /api/leaderboard currently returns public
+        Production /api/leaderboard returns privacy-safe
         leaderboard fields such as:
 
             {
+                player_id,
                 username,
                 score,
                 created_at
             }
 
-        It does NOT necessarily expose uid.
-
-        Therefore YOU must not depend exclusively on entry.uid.
-
-        When uid is present, UID is the strongest match.
-
-        When uid is intentionally omitted by the public API,
-        the verified Pi username returned by /api/auth/validate
-        is used as the fallback identity.
-
-        Pi usernames are compared case-insensitively so a
-        difference such as:
-
-            JoshuaDelacruz
-            joshuadelacruz
-
-        does not prevent the current user from becoming YOU.
+        player_id is an opaque server-generated HMAC. The same
+        value is returned for the authenticated player without
+        exposing the raw Pi UID on the public leaderboard.
     */
 
     function isLeaderboardEntryCurrentUser(
@@ -2987,65 +2898,25 @@
         }
 
 
-        /*
-            1. Prefer verified UID whenever the leaderboard
-               response contains one.
-        */
-
-        const currentUid =
+        const currentPlayerId =
             normalizeIdentity(
-                user.uid
+                user.player_id
             );
 
-        const entryUid =
+        const entryPlayerId =
             normalizeIdentity(
-                entry.uid
+                entry.player_id
             );
 
         if (
-            currentUid &&
-            entryUid
+            currentPlayerId &&
+            entryPlayerId
         ) {
-
             return (
-                currentUid ===
-                entryUid
+                currentPlayerId ===
+                entryPlayerId
             );
-
         }
-
-
-        /*
-            2. Production leaderboard privacy-safe fallback.
-
-            The public leaderboard does not need to expose
-            UID for every player. Match against the username
-            returned by the already-verified auth endpoint.
-        */
-
-        const currentUsername =
-            normalizeIdentity(
-                user.username
-            );
-
-        const entryUsername =
-            normalizeIdentity(
-                entry.username
-            );
-
-        if (
-            currentUsername &&
-            entryUsername
-        ) {
-
-            return (
-                currentUsername ===
-                entryUsername
-            );
-
-        }
-
-
         return false;
 
     }
@@ -3084,6 +2955,9 @@
         const identitySnapshot =
             currentUser
                 ? {
+                    player_id:
+                        currentUser.player_id || null,
+
                     uid:
                         currentUser.uid || null,
 
@@ -3138,7 +3012,7 @@
             if (!response.ok) {
 
                 throw new Error(
-                    data?.error ||
+                    data?.error?.message ||
                     `Leaderboard request failed (${response.status})`
                 );
 
@@ -3151,7 +3025,7 @@
             ) {
 
                 throw new Error(
-                    data?.error ||
+                    data?.error?.message ||
                     "Invalid leaderboard response"
                 );
 
@@ -3291,20 +3165,9 @@
                     /*
                         IMPORTANT:
 
-                        Do NOT use only entry.uid.
-
-                        Production /api/leaderboard may intentionally
-                        return:
-
-                            username
-                            score
-                            created_at
-
-                        without UID.
-
-                        The helper first uses UID when available,
-                        then safely falls back to the verified
-                        username.
+                        Match the opaque player_id returned by both
+                        authenticated validation and the public
+                        leaderboard. Never expose or compare raw UID.
                     */
 
                     const isCurrentUser =
@@ -3327,9 +3190,7 @@
                     } else {
 
                         displayName =
-                            maskUsername(
-                                entry.username
-                            );
+                            entry.username || "***";
 
                     }
 
@@ -4139,7 +4000,7 @@
             ) {
 
                 throw new Error(
-                    data?.error ||
+                    data?.error?.message ||
                     `Score submission failed (${response.status})`
                 );
 
