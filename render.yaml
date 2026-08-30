@@ -15,6 +15,8 @@ services:
         value: "true"
       - key: SECRET_KEY_BASE
         generateValue: true
+      - key: PLAYER_ID_SECRET
+        generateValue: true
       - key: PI_API_URL
         value: https://api.minepi.com/v2/me
 

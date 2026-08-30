@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: pi_game_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      RAILS_ENV: test
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/pi_game_test
+      SECRET_KEY_BASE: test-secret-key-base-that-is-long-enough-for-ci
+      PLAYER_ID_SECRET: test-player-id-secret-that-is-long-enough-for-ci
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3.6
+          bundler-cache: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Prepare database
+        run: bin/rails db:prepare
+      - name: Run Rails tests
+        run: bin/rails test
+      - name: Check inline JavaScript syntax
+        run: |
+          perl -0777 -ne 'while (/<script(?:\s[^>]*)?>(.*?)<\/script>/sg) { print "$1\n" }' public/index.html > /tmp/pi2048-inline.js
+          node --check /tmp/pi2048-inline.js
