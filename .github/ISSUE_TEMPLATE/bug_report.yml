@@ -1,0 +1,33 @@
+name: Bug report
+description: Report a reproducible game, authentication, API, or leaderboard problem.
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Never include Pi access tokens, cookies, credentials, private identifiers, or production data.
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected area
+      options: [Game interface, Pi authentication, Score submission, Leaderboard, Deployment, Documentation]
+    validations:
+      required: true

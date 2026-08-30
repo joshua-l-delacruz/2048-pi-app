@@ -2,9 +2,13 @@
 
 A production-deployed 2048 game with Pi Network authentication, a Ruby on Rails API, PostgreSQL score storage, and a privacy-conscious leaderboard.
 
-**Live application:** https://2048.joshuadelacruz.solutions
+**[Play the live application](https://2048.joshuadelacruz.solutions)**
 
 **Architecture:** Rails 7.2 · Ruby 3.3 · PostgreSQL · Docker · Render · Cloudflare
+
+![2048 Pi game interface](https://raw.githubusercontent.com/joshua-l-delacruz/lab-docs/main/assets/images/pi-2048-game.png)
+
+> **Portfolio scope:** Authentication is server-verified, but scores remain client-authoritative. Treat the leaderboard as a demonstration, not as a prize-bearing competitive system.
 
 ## What this project demonstrates
 
@@ -120,3 +124,11 @@ See [docs/cloudflare-deployment.md](docs/cloudflare-deployment.md) for deploymen
 ## Portfolio scope
 
 This is an independently built portfolio application. Pi Network authentication is integrated through its public SDK/API; this project is not presented as an official Pi Network product or endorsement.
+
+## Contributing
+
+Focused bug reports and security-conscious improvements are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening an issue or pull request. Please do not include Pi access tokens, credentials, or personal information in reports.
+
+## License
+
+No open-source license has been selected yet. Copyright remains with the repository owner unless a license is added.
