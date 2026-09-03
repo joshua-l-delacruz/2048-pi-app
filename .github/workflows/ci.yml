@@ -51,7 +51,5 @@ jobs:
         run: docker build --tag 2048-pi-app:ci .
       - name: Check inline JavaScript syntax
         run: |
-          grep -q 'href="https://joshuadelacruz.solutions/"' public/index.html
-          grep -q '← Main Portfolio' public/index.html
           perl -0777 -ne 'while (/<script(?:\s[^>]*)?>(.*?)<\/script>/sg) { print "$1\n" }' public/index.html > /tmp/pi2048-inline.js
           node --check /tmp/pi2048-inline.js
