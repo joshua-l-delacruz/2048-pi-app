@@ -39,10 +39,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Verify Rails version
+        run: bundle exec rails runner 'abort("expected Rails 8.0") unless Rails.gem_version.segments.first(2) == [8, 0]'
+      - name: Check autoloading
+        run: bin/rails zeitwerk:check
       - name: Prepare database
         run: bin/rails db:prepare
       - name: Run Rails tests
         run: bin/rails test
+      - name: Build production container
+        run: docker build --tag 2048-pi-app:ci .
       - name: Check inline JavaScript syntax
         run: |
           grep -q 'href="https://joshuadelacruz.solutions/"' public/index.html
