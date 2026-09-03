@@ -1,28 +1,18 @@
 require "test_helper"
-require "base64"
-require "digest"
 
 class SecurityHeadersTest < ActiveSupport::TestCase
-  test "content security policy permits every inline style and script" do
+  test "page uses external assets allowed by the content security policy" do
     html = Rails.root.join("public/index.html").binread
     policy = SecurityHeaders::CONTENT_SECURITY_POLICY.split("; ").to_h do |directive|
       name, *sources = directive.split
       [name, sources]
     end
 
-    inline_blocks = {
-      "style-src" => html.scan(/<style(?:\s[^>]*)?>(.*?)<\/style>/m).flatten,
-      "script-src" => html.scan(/<script(?![^>]*\bsrc=)(?:\s[^>]*)?>(.*?)<\/script>/m).flatten
-    }
-
-    inline_blocks.each do |directive, blocks|
-      refute_empty blocks, "expected at least one inline block for #{directive}"
-
-      blocks.each do |block|
-        source = "'sha256-#{Base64.strict_encode64(Digest::SHA256.digest(block))}'"
-        assert_includes policy.fetch(directive), source,
-          "#{directive} must allow the current inline content"
-      end
-    end
+    assert_empty html.scan(/<style(?:\s[^>]*)?>/m), "styles must not be inline"
+    assert_empty html.scan(/<script(?![^>]*\bsrc=)(?:\s[^>]*)?>/m), "scripts must not be inline"
+    assert_includes html, '<link rel="stylesheet" href="/app.css">'
+    assert_includes html, '<script src="/app.js" defer></script>'
+    assert_includes policy.fetch("style-src"), "'self'"
+    assert_includes policy.fetch("script-src"), "'self'"
   end
 end
