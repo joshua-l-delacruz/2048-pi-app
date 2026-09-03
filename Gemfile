@@ -8,6 +8,6 @@ gem "puma", ">= 5.0"
 gem "bootsnap", require: false
 
 group :development, :test do
-  gem "debug"
-  gem "minitest", "~> 5.27", platforms: %i[mri windows], require: "debug/prelude"
+  gem "debug", platforms: %i[mri windows], require: "debug/prelude"
+  gem "minitest", "~> 5.27"
 end
