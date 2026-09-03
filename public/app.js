@@ -39,7 +39,8 @@
         /api/leaderboard
     */
 
-    const BACKEND_URL = "";
+    const BACKEND_URL =
+        "https://2048.joshuadelacruz.solutions";
 
 
     /*

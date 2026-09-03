@@ -6,6 +6,7 @@ require "active_job/railtie"
 require "active_record/railtie"
 require "action_controller/railtie"
 require "action_view/railtie"
+require_relative "../lib/api_cors"
 require_relative "../lib/security_headers"
 
 Bundler.require(*Rails.groups)
@@ -16,7 +17,8 @@ module PiGame
     config.api_only = true
     config.public_file_server.enabled = true
     config.force_ssl = Rails.env.production?
-    config.middleware.insert_before 0, SecurityHeaders
+    config.middleware.insert_before 0, ApiCors
+    config.middleware.insert_after ApiCors, SecurityHeaders
     config.middleware.use Rack::Deflater
     config.action_dispatch.default_headers.merge!(
       "X-Content-Type-Options" => "nosniff",

@@ -88,9 +88,10 @@ Errors use a consistent JSON envelope with a stable machine-readable code and a 
 1. Copy `.env.example` to `.env`.
 2. Set `DATABASE_URL` for PostgreSQL and replace `SECRET_KEY_BASE` and `PLAYER_ID_SECRET` with separate long random secrets.
 3. Keep `PI_API_URL=https://api.minepi.com/v2/me` unless using an explicitly controlled test endpoint.
-4. Install Ruby 3.3.6 and Bundler.
-5. Run `bundle install`, `bin/rails db:prepare`, and `bin/rails server`.
-6. Open `http://localhost:3000`.
+4. Set `CORS_ALLOWED_ORIGINS` to the comma-separated HTTPS origins that host the Pi frontend. The production PiNet and Vercel origins are allowed by default.
+5. Install Ruby 3.3.6 and Bundler.
+6. Run `bundle install`, `bin/rails db:prepare`, and `bin/rails server`.
+7. Open `http://localhost:3000`.
 
 The UI can be explored in demo mode outside Pi Browser. Real Pi authentication requires the Pi SDK environment and a valid Pi access token; never commit tokens or production secrets.
 

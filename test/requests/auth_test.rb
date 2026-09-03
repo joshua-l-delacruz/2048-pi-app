@@ -25,4 +25,27 @@ class AuthTest < ActionDispatch::IntegrationTest
     assert_equal "INVALID_REQUEST", response.parsed_body.dig("error", "code")
     assert_equal "no-store", response.headers["Cache-Control"]
   end
+
+  test "allows the configured Pi frontend to call the API" do
+    options "/api/auth/validate", headers: {
+      "Origin" => "https://2048-indol-seven.vercel.app",
+      "Access-Control-Request-Method" => "POST",
+      "Access-Control-Request-Headers" => "content-type"
+    }
+
+    assert_response :no_content
+    assert_equal "https://2048-indol-seven.vercel.app", response.headers["Access-Control-Allow-Origin"]
+    assert_includes response.headers["Access-Control-Allow-Methods"], "POST"
+    assert_includes response.headers["Access-Control-Allow-Headers"], "Content-Type"
+  end
+
+  test "does not allow unknown origins to call the API" do
+    post "/api/auth/validate",
+      params: {},
+      headers: { "Origin" => "https://untrusted.example" },
+      as: :json
+
+    assert_response :unprocessable_entity
+    assert_nil response.headers["Access-Control-Allow-Origin"]
+  end
 end
