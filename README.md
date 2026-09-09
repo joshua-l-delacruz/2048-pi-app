@@ -4,6 +4,8 @@
 
 A production-deployed 2048 game with Pi Network authentication, a Ruby on Rails API, PostgreSQL score storage, and a privacy-conscious leaderboard.
 
+**Portfolio role: end-to-end engineering proof supporting an IAM and cloud-operations profile.**
+
 **[Play the live application](https://2048.joshuadelacruz.solutions)**
 
 **Architecture:** Rails 7.2 · Ruby 3.3 · PostgreSQL · Docker · Render · Cloudflare
@@ -11,6 +13,10 @@ A production-deployed 2048 game with Pi Network authentication, a Ruby on Rails 
 ![2048 Pi game interface](https://raw.githubusercontent.com/joshua-l-delacruz/lab-docs/main/assets/images/pi-2048-game.png)
 
 > **Portfolio scope:** Authentication is server-verified, but scores remain client-authoritative. Treat the leaderboard as a demonstration, not as a prize-bearing competitive system.
+
+## Why this matters
+
+The game is the interface; the engineering evidence is the distributed application behind it. I implemented server-verified identity, API validation, database persistence, atomic cooldown enforcement, health reporting, container delivery, CI, and documented failure behavior across Cloudflare, Render, Rails, PostgreSQL, and the Pi API. It shows end-to-end delivery while the portfolio remains anchored in IAM, governance, and operations.
 
 ## What this project demonstrates
 
